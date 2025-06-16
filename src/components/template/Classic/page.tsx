@@ -1,114 +1,74 @@
-import React from "react";
+"use client";
+import React, { useEffect, useRef, useState } from "react";
 import { ResumeData } from "../types";
-
-// resumeData.ts
+import {
+  EducationSection,
+  ExperienceSection,
+  Header,
+  Projects,
+  Skills,
+  Summary,
+} from "./Sections";
 
 const Classic = ({ data }: { data: ResumeData }) => {
+  const sectionRefs = useRef<any>({});
+  const [pageBreaks, setPageBreaks] = useState<any>(null);
+
+  useEffect(() => {
+    let accumulatedHeight = 0;
+    const pageLimit = 1123; // A4 size at 96 DPI
+    const breakPoints: string[] = [];
+
+    for (const section of sections) {
+      const el = sectionRefs.current[section.id];
+      if (!el) continue;
+
+      const height = el.getBoundingClientRect().height;
+
+      if (accumulatedHeight + height > pageLimit) {
+        breakPoints.push(section.id);
+        accumulatedHeight = height; // reset for next page
+      } else {
+        accumulatedHeight += height;
+      }
+    }
+
+    setPageBreaks(breakPoints); // store the points where a new page should start
+  }, []);
+
+  const sections = [
+    { id: "header", component: <Header data={data} /> },
+    { id: "summary", component: <Summary summary={data?.summary || ""} /> },
+    {
+      id: "experience",
+      component: <ExperienceSection experience={data.experience} />,
+    },
+    {
+      id: "education",
+      component: <EducationSection education={data.education} />,
+    },
+    { id: "projects", component: <Projects projects={data.projects || []} /> },
+    { id: "skills", component: <Skills skills={data.skills || []} /> },
+  ];
+
+  console.log(pageBreaks)
+
   return (
     <div className="max-w-3xl mx-auto bg-white text-black font-serif p-8 shadow-lg border border-gray-300 space-y-6">
-      {/* Header */}
-      <header className="text-center">
-        <h1 className="text-3xl font-bold">{data.name}</h1>
-        <p className="text-lg italic">{data.title}</p>
-        <div className="text-sm mt-2">
-          <p>
-            {data.contact.email} | {data.contact.phone}
-          </p>
-          <p>
-            {data.contact.website} | {data.contact.linkedin}
-          </p>
-        </div>
-      </header>
-
-      {/* Summary */}
-      <section>
-        <h2 className="text-xl font-semibold border-b border-gray-400 mb-2">
-          Professional Summary
-        </h2>
-        <p className="text-justify">{data.summary}</p>
-      </section>
-
-      {/* Experience */}
-      <section>
-        <h2 className="text-xl font-semibold border-b border-gray-400 mb-2">
-          Work Experience
-        </h2>
-        {data.experience.map((exp, idx) => (
-          <div key={idx} className="mb-4">
-            <div className="flex justify-between text-sm font-medium">
-              <span>
-                {exp.role} @ {exp.company}
-              </span>
-              <span className="italic">
-                {exp.startDate} – {exp.endDate}
-              </span>
-            </div>
-            <ul className="list-disc ml-5 mt-1 text-sm text-gray-700">
-              {exp.description.map((d, i) => (
-                <li key={i}>{d}</li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </section>
-
-      {/* Education */}
-      <section>
-        <h2 className="text-xl font-semibold border-b border-gray-400 mb-2">
-          Education
-        </h2>
-        {data.education.map((edu, idx) => (
+      {sections.map((section, index) => {
+        const shouldBreakBefore = pageBreaks?.includes(section.id);
+        return (
           <div
-            key={idx}
-            className="text-sm mb-2 w-full flex align-items-center justify-between"
+            key={section.id}
+            ref={(el) => {
+              sectionRefs.current[section.id] = el;
+            }}
+            className={shouldBreakBefore ? "page-break" : ""}
           >
-            <span>
-              <strong>{edu.degree}</strong> – {edu.school}
-            </span>
-            <span className="italic">
-              {edu.startDate} – {edu.endDate}
-            </span>
+            {section.component}
           </div>
-        ))}
-      </section>
-
-      {/* Skills */}
-      <section>
-        <h2 className="text-xl font-semibold border-b border-gray-400 mb-2">
-          Skills
-        </h2>
-        <p className="text-sm">{data.skills.join(", ")}</p>
-      </section>
-
-      {/* Projects */}
-      {data && data?.projects && data?.projects?.length > 0 && (
-        <section>
-          <h2 className="text-xl font-semibold border-b border-gray-400 mb-2">
-            Projects
-          </h2>
-          {data?.projects.map((proj, i) => (
-            <div key={i} className="mb-2">
-              <div className="flex justify-between text-sm font-medium">
-                <span>{proj.name}</span>
-                {proj.live && (
-                  <a
-                    href={proj.live}
-                    className="text-blue-600 underline ml-2"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Live
-                  </a>
-                )}
-              </div>
-              <p className="text-sm">{proj.description}</p>
-              <p className="text-xs italic text-gray-600">
-                Tech: {proj.tech.join(", ")}
-              </p>
-            </div>
-          ))}
-        </section>
-      )}
+        );
+      })}
     </div>
   );
 };
