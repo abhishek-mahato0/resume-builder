@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { ResumeData } from "../types";
@@ -9,6 +10,7 @@ import {
   Skills,
   Summary,
 } from "./Sections";
+import { downloadResumeAsPDF } from "@/utils";
 
 const Classic = ({ data }: { data: ResumeData }) => {
   const sectionRefs = useRef<any>({});
@@ -43,19 +45,20 @@ const Classic = ({ data }: { data: ResumeData }) => {
       id: "experience",
       component: <ExperienceSection experience={data.experience} />,
     },
+    { id: "skills", component: <Skills skills={data.skills || []} /> },
     {
       id: "education",
       component: <EducationSection education={data.education} />,
     },
     { id: "projects", component: <Projects projects={data.projects || []} /> },
-    { id: "skills", component: <Skills skills={data.skills || []} /> },
   ];
 
-  console.log(pageBreaks)
-
   return (
-    <div className="max-w-3xl mx-auto bg-white text-black font-serif p-8 shadow-lg border border-gray-300 space-y-6">
-      {sections.map((section, index) => {
+    <div
+      className="max-w-3xl mx-auto bg-[#ffffff] text-[#000000] font-serif p-8 shadow-lg border space-y-6"
+      id="classic-resume"
+    >
+      {sections.map((section) => {
         const shouldBreakBefore = pageBreaks?.includes(section.id);
         return (
           <div
@@ -69,6 +72,12 @@ const Classic = ({ data }: { data: ResumeData }) => {
           </div>
         );
       })}
+      <button
+        onClick={() => downloadResumeAsPDF("classic-resume", "resume.pdf")}
+        className="mt-4 p-2 bg-blue-500 text-white rounded"
+      >
+        Print Resume
+      </button>
     </div>
   );
 };

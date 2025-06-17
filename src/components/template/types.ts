@@ -2,17 +2,21 @@ export interface ResumeData {
   name: string;
   title: string;
   summary: string;
-  contact: {
-    email: string;
-    phone: string;
-    website: string;
-    linkedin: string;
-    github?: string;
-  };
+  contact: Contact;
   experience: Experience[];
   education: Education[];
   skills: string[];
   projects?: Project[];
+}
+
+export interface Contact {
+  email: string;
+  phone: string;
+  address?: string;
+  website?: string;
+  linkedin?: string;
+  github?: string;
+  twitter?: string;
 }
 
 export interface Experience {
