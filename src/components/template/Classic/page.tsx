@@ -46,6 +46,7 @@ const Classic = ({ data }: { data: ResumeData }) => {
       component: <ExperienceSection experience={data.experience} />,
     },
     { id: "skills", component: <Skills skills={data.skills || []} /> },
+    { id: "language", component: <Skills skills={data.language || []} /> },
     {
       id: "education",
       component: <EducationSection education={data.education} />,
