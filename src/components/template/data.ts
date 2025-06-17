@@ -92,9 +92,9 @@ export const sampleData: ResumeData = {
   ],
 
   skills: [
-    "React",
-    "TypeScript",
-    "Node.js",
+    "React - Expert",
+    "TypeScript - Proficient",
+    "Node.js - Proficient",
     "MongoDB",
     "Redux",
     "Framer Motion",
@@ -102,7 +102,7 @@ export const sampleData: ResumeData = {
     "Tailwind CSS",
     "OpenAI API",
   ],
-
+  language: ["English - Proficient", "Nepali - Expert", "Hindi - Proficient"],
   projects: [
     {
       name: "ResumeGPT",

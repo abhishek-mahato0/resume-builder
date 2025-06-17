@@ -1,15 +1,10 @@
 import { FC } from "react";
-import {
-  Contact,
-  Education,
-  Experience,
-  Project,
-  ResumeData,
-} from "../../types";
+import { Contact, Education, Experience, Project, ResumeData } from "../types";
 import Title from "@/components/atoms/Title";
 import { IoMdMail } from "react-icons/io";
 import { FaGithub, FaLink, FaLinkedin, FaPhoneAlt } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
+import { GoDotFill } from "react-icons/go";
 
 const contactInfo = [
   {
@@ -44,7 +39,7 @@ const contactInfo = [
   },
 ];
 
-export const Header: FC<{ data: ResumeData }> = ({ data }) => (
+export const ClassicHeader: FC<{ data: ResumeData }> = ({ data }) => (
   <header className="text-center flex flex-col gap-2">
     <h1 className="text-3xl font-bold text-[#171717]">{data.name}</h1>
     <p className="text-lg italic text-[#374151]">{data.title}</p>
@@ -63,14 +58,14 @@ export const Header: FC<{ data: ResumeData }> = ({ data }) => (
   </header>
 );
 
-export const Summary: FC<{ summary: string }> = ({ summary }) => (
+export const ClassicSummary: FC<{ summary: string }> = ({ summary }) => (
   <section>
     <Title title="Professional Summary" />
     <p className="text-justify text-[#374151]">{summary}</p>
   </section>
 );
 
-export const ExperienceSection: FC<{ experience: Experience[] }> = ({
+export const ClassicExperienceSection: FC<{ experience: Experience[] }> = ({
   experience,
 }) => (
   <section>
@@ -95,7 +90,7 @@ export const ExperienceSection: FC<{ experience: Experience[] }> = ({
   </section>
 );
 
-export const EducationSection: FC<{ education: Education[] }> = ({
+export const ClassicEducationSection: FC<{ education: Education[] }> = ({
   education,
 }) => (
   <section>
@@ -116,14 +111,28 @@ export const EducationSection: FC<{ education: Education[] }> = ({
   </section>
 );
 
-export const Skills: FC<{ skills: string[] }> = ({ skills }) => (
+export const ClassicSkills: FC<{ skills: string[]; title: string }> = ({
+  skills,
+  title = "Skills",
+}) => (
   <section>
-    <Title title="Skills" />
-    <p className="text-sm text-[#374151]">{skills.join(", ")}</p>
+    <Title title={title} />
+    <div className="flex flex-wrap gap-3 list-disc list-inside p-3 text-sm text-[#374151]">
+      {skills.map((skill, index) => (
+        <div
+          key={skill + index}
+          className="flex gap-1"
+          style={{ alignItems: "center" }}
+        >
+          <GoDotFill />
+          {skill}
+        </div>
+      ))}
+    </div>
   </section>
 );
 
-export const Projects: FC<{ projects?: Project[] }> = ({ projects }) => {
+export const ClassicProjects: FC<{ projects?: Project[] }> = ({ projects }) => {
   if (!projects || projects.length === 0) return null;
   return (
     <section>
