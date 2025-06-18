@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { ResumeData } from "../template/types";
 import { downloadResumeAsPDF } from "@/utils";
+import { RiPrinterLine } from "react-icons/ri";
 
 const Sidebar = ({
   sampleData,
@@ -12,8 +13,8 @@ const Sidebar = ({
   const [jsonText, setJsonText] = useState(""); // editable text
   const [parsedJson, setParsedJson] = useState<ResumeData | null>(null);
   const [isValid, setIsValid] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Set initial value when data arrives
   useEffect(() => {
     const prettyJson = JSON.stringify(sampleData, null, 2);
     setJsonText(prettyJson);
@@ -25,10 +26,8 @@ const Sidebar = ({
     onDataChange(parsedJson);
   }, [parsedJson]);
 
-  // Handle user editing the JSON
   const handleRawJsonChange = (value: string) => {
     setJsonText(value);
-
     try {
       const parsed = JSON.parse(value);
       setParsedJson(parsed);
@@ -38,34 +37,83 @@ const Sidebar = ({
     }
   };
 
-  console.log("data", parsedJson);
+  const saveResume = async () => {
+    setIsLoading(true);
+    if (!parsedJson) {
+      alert("❌ No data to save.");
+      setIsLoading(false);
+      return;
+    }
+    const isDownloaded = await downloadResumeAsPDF(
+      "classic-resume",
+      "resume.pdf"
+    );
+    if (isDownloaded) {
+      alert("✅ Resume saved successfully!");
+    } else {
+      alert("❌ Failed to save resume.");
+    }
+    setIsLoading(false);
+  };
+
+  const handleSave = () => {
+    if (isValid && parsedJson) {
+      alert("✅ Data saved successfully!");
+      // You can replace this with actual save logic
+    } else {
+      alert("❌ Cannot save. Fix JSON syntax.");
+    }
+  };
 
   return (
-    <div className="flex flex-col w-[30%] h-[100vh] gap-2 p-2">
-      <p className="font-bold">Your Data</p>
-      <button
-        onClick={() => downloadResumeAsPDF("classic-resume", "resume.pdf")}
-        className="mt-4 p-2 bg-blue-500 text-white rounded"
-      >
-        Print Resume
-      </button>
+    <div className="flex flex-col w-[30%] bg-black text-white h-[100vh] gap-4 py-6 pr-4 pl-8">
+      {/* Title and Description */}
+      <div>
+        <h2 className="text-xl font-bold">Your Resume Data</h2>
+        <p className="text-sm text-gray-300 mt-1">
+          This section allows you to view and edit your resume data in JSON
+          format. Make changes and see updates live.
+        </p>
+      </div>
 
-      <div className="bg-gray-100 text-black h-[90%] overflow-y-scroll border border-gray-300 rounded">
+      {/* Buttons */}
+      <div className="flex gap-2">
+        <button
+          onClick={saveResume}
+          className="px-3 py-2 bg-blue-600 rounded text-sm cursor-pointer flex gap-1 items-center"
+          disabled={isLoading}
+        >
+          <RiPrinterLine />
+          <span>{isLoading ? "Printing..." : "Print"}</span>
+        </button>
+        <button
+          onClick={handleSave}
+          className="px-3 py-2 bg-green-600 rounded text-sm cursor-pointer"
+        >
+          💾 Save
+        </button>
+      </div>
+
+      {/* JSON Editor */}
+      <div className="flex-1 bg-gray-100 text-black overflow-y-scroll border border-gray-300 rounded">
         <textarea
           value={jsonText}
           onChange={(e) => handleRawJsonChange(e.target.value)}
-          className="h-full w-full font-mono p-2 text-sm"
+          className="h-full w-full font-mono p-2 text-sm outline-none"
         />
       </div>
-      <div className="flex gap-4 bg-gray-900 border-gray-500">
+
+      {/* AI Section Placeholder */}
+      <div className="flex gap-4 items-center bg-gray-900 border border-gray-600 p-2 rounded">
         <input
           type="text"
-          onChange={() => {}}
-          placeholder="Ask AI"
-          className="p-2 outline-0 focus:outline-0"
+          placeholder="Ask AI (coming soon)"
+          className="flex-1 bg-transparent text-white placeholder-gray-400 outline-none"
+          disabled
         />
-        <p>Send</p>
+        <p className="text-gray-500 cursor-not-allowed">Send</p>
       </div>
+
       {!isValid && (
         <p className="text-red-500 text-sm font-semibold">
           ⚠️ Invalid JSON syntax

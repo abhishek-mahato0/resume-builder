@@ -96,7 +96,7 @@ export const ModernSkills: FC<{ skills: string[]; title?: string }> = ({
 }) => (
   <section className="mt-6">
     <Title title={title} />
-    <div className="flex flex-wrap gap-3 list-disc list-inside bg-[#f9fafb] border border-[#d1d5db] rounded-md p-3 text-sm text-[#374151]">
+    <div className="flex flex-wrap gap-5 list-disc list-inside bg-[#f9fafb] border border-[#d1d5db] rounded-md p-3 text-sm text-[#374151]">
       {skills.map((skill, index) => (
         <div
           key={skill + index}

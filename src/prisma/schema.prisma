@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGO_URL")
+}
+
+model User {
+  id                 String    @id @default(auto()) @map("_id") @db.ObjectId
+  email              String    @unique
+  password           String? // optional for OAuth
+  token              String?
+  resetPasswordToken String?
+  session            String?
+  createdAt          DateTime  @default(now())
+  UserInfo           UserInfo?
+  Template           Template?
+}
+
+model UserInfo {
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String       @unique @db.ObjectId
+  name       String
+  title      String
+  summary    String
+  contact    Contact
+  experience Experience[]
+  education  Education[]
+  skills     String[]
+  language   String[]
+  projects   Project[]
+  Template   Template[]
+  user       User         @relation(fields: [userId], references: [id])
+}
+
+model Template {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  user       User      @relation(fields: [userId], references: [id])
+  userId     String    @unique @db.ObjectId
+  createdAt  DateTime  @default(now())
+  UserInfo   UserInfo? @relation(fields: [userInfoId], references: [id])
+  userInfoId String?   @db.ObjectId
+}
+
+// Embedded types for nested structures
+type Contact {
+  email    String
+  phone    String
+  website  String
+  linkedin String
+  github   String
+}
+
+type Experience {
+  company     String
+  role        String
+  startDate   String
+  endDate     String
+  description String[]
+}
+
+type Education {
+  school    String
+  degree    String
+  startDate String
+  endDate   String
+}
+
+type Project {
+  name        String
+  description String
+  tech        String[]
+  live        String?
+  code        String?
+}

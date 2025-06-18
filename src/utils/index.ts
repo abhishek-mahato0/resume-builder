@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export const getTitle = (key: string) => {
   const texts = key.split("-");
@@ -40,9 +42,10 @@ export const downloadResumeAsPDF = async (
     }
     console.log("PDF generated successfully");
     pdf.save(fileName);
+    return true;
   } catch (error) {
     console.error("Error generating PDF:", error);
-    return;
+    return false;
   }
 };
 
@@ -55,4 +58,8 @@ export function debounce<T extends (...args: any[]) => void>(
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => fn(...args), delay);
   };
+}
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
 }

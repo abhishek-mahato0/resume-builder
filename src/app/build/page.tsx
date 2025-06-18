@@ -8,20 +8,28 @@ import React, { useState } from "react";
 
 const Build = () => {
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
+  const [isSideNavCollapsed, setIsSideNavCollapsed] = useState(false);
+
   return (
-    <div className="flex w-full gap-4">
-      <SideNav />
-      <div className="h-[100vh] w-[50%] overflow-y-scroll">
+    <div className="flex w-full h-screen overflow-hidden">
+      <SideNav
+        onCollapse={() => setIsSideNavCollapsed(!isSideNavCollapsed)}
+        isCollapsed={isSideNavCollapsed}
+      />
+      <div
+        className={`transition-all duration-300 ease-in-out flex-1 ${
+          isSideNavCollapsed ? "lg:w-[70%]" : "lg:w-[50%]"
+        } overflow-y-scroll`}
+      >
         {resumeData ? (
-          <Classic data={resumeData || null} />
+          <Classic data={resumeData} />
         ) : (
-          <div className="h-full bg-gray-500">No data yet.</div>
+          <div className="h-full bg-gray-800 flex items-center justify-center text-white">
+            No data yet.
+          </div>
         )}
       </div>
-      <Sidebar
-        sampleData={sampleData}
-        onDataChange={(data) => setResumeData(data)}
-      />
+      <Sidebar sampleData={sampleData} onDataChange={setResumeData} />
     </div>
   );
 };
