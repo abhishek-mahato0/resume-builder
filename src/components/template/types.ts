@@ -42,3 +42,13 @@ export interface Project {
   live?: string;
   code?: string;
 }
+
+export type TemplateType = "classic" | "modern";
+
+
+export type TemplateProps = {
+  id: number;
+  title: string;
+  preview: string;
+  value: TemplateType;
+};

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React from "react";
 import {
@@ -8,7 +9,7 @@ import {
   DialogTitle,
 } from "../ui/Dialog";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { handleLogin } from "./utils";
+import { handleAuth} from "./utils";
 import { FaGoogle } from "react-icons/fa";
 import Button from "../ui/Button";
 import { signIn } from "next-auth/react";
@@ -27,11 +28,11 @@ const Login = () => {
   };
 
   return (
-    <Dialog open={true} onOpenChange={(open) => !open && router.push("/")}>
+    <Dialog open={true} onOpenChange={(open:boolean) => !open && router.push("/")}>
       <DialogContent
         showCloseButton
-        onInteractOutside={(e) => e.preventDefault()}
-        onEscapeKeyDown={(e) => e.preventDefault()}
+        onInteractOutside={(e:any) => e.preventDefault()}
+        onEscapeKeyDown={(e:any) => e.preventDefault()}
       >
         <DialogHeader>
           <DialogTitle>
@@ -41,7 +42,7 @@ const Login = () => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                handleLogin(e);
+                handleAuth(e, currentForm);
               }}
               autoComplete="off"
               className="space-y-6 w-full max-w-md mx-auto rounded-xl shadow-lg"

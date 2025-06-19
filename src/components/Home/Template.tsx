@@ -4,36 +4,15 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-type TemplateType = {
-  id: number;
-  title: string;
-  preview: string;
-  value: string;
-};
-
-export const templates: TemplateType[] = [
-  {
-    id: 1,
-    title: "Classic Resume",
-    preview: "/templates/classic.png",
-    value: "classic",
-  },
-  {
-    id: 2,
-    title: "Modern Resume",
-    preview: "/templates/modern.png",
-    value: "modern",
-  },
-];
 
 const Template = () => {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
   const router = useRouter();
   const handleTemplateClick = (template: TemplateType) => {
-    if (!session) {
-      router.push("?login=true&callbackUrl=/build?template=" + template.value);
-      return;
-    }
+    // if (!session) {
+    //   router.push("?login=true&callbackUrl=/build?template=" + template.value);
+    //   return;
+    // }
     router.push("/build?template=" + template.value);
   };
   return (

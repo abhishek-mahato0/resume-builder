@@ -1,4 +1,4 @@
-import { ResumeData } from "./types";
+import { ResumeData, TemplateProps } from "./types";
 
 export const sampleData: ResumeData = {
   name: "Abhishek Mahato",
@@ -152,3 +152,18 @@ export const sampleData: ResumeData = {
     },
   ],
 };
+
+export const templates: TemplateProps[] = [
+  {
+    id: 1,
+    title: "Classic Resume",
+    preview: "/templates/classic.png",
+    value: "classic",
+  },
+  {
+    id: 2,
+    title: "Modern Resume",
+    preview: "/templates/modern.png",
+    value: "modern",
+  },
+];

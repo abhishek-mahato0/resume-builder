@@ -3,6 +3,7 @@ import {
   TbLayoutSidebarLeftCollapseFilled,
   TbLayoutSidebarLeftExpandFilled,
 } from "react-icons/tb";
+import { templates } from "../template/data";
 
 const SideNav = ({
   isCollapsed,
@@ -34,6 +35,11 @@ const SideNav = ({
         <div className="px-4 mt-4">
           {/* Add nav items here */}
           <p className="text-sm text-gray-300">Dashboard</p>
+          {templates.map((temp) => (
+            <p className=" p-2 text-gray-400" key={temp.id}>
+              {temp.title}
+            </p>
+          ))}
           <p className="text-sm text-gray-300 mt-2">Templates</p>
         </div>
       )}
