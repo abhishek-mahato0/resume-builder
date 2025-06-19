@@ -1,43 +1,9 @@
 import { FC } from "react";
-import { Contact, Education, Experience, Project, ResumeData } from "../types";
+import { Contact, Education, Experience, Project, ResumeData, Skills } from "../types";
 import Title from "@/components/atoms/Title";
-import { IoMdMail } from "react-icons/io";
-import { FaGithub, FaLink, FaLinkedin, FaPhoneAlt } from "react-icons/fa";
-import { MdLocationOn } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
+import { contactInfo } from "../utils";
 
-const contactInfo = [
-  {
-    label: "Email",
-    value: "email",
-    icon: <IoMdMail />,
-  },
-  {
-    label: "Phone",
-    value: "phone",
-    icon: <FaPhoneAlt />,
-  },
-  {
-    label: "Address",
-    value: "address",
-    icon: <MdLocationOn />,
-  },
-  {
-    label: "Website",
-    value: "website",
-    icon: <FaLink />,
-  },
-  {
-    label: "LinkedIn",
-    value: "linkedin",
-    icon: <FaLinkedin />,
-  },
-  {
-    label: "GitHub",
-    value: "github",
-    icon: <FaGithub />,
-  },
-];
 
 export const ClassicHeader: FC<{ data: ResumeData }> = ({ data }) => (
   <header className="text-center flex flex-col gap-2">
@@ -111,21 +77,21 @@ export const ClassicEducationSection: FC<{ education: Education[] }> = ({
   </section>
 );
 
-export const ClassicSkills: FC<{ skills: string[]; title: string }> = ({
+export const ClassicSkills: FC<{ skills: string[] | Skills[]; title: string }> = ({
   skills,
   title = "Skills",
 }) => (
   <section>
     <Title title={title} />
     <div className="flex flex-wrap gap-3 list-disc list-inside p-3 text-sm text-[#374151]">
-      {skills.map((skill, index) => (
+      {skills.map((skill) => (
         <div
-          key={skill + index}
+          key={skill.toString()}
           className="flex gap-1"
           style={{ alignItems: "center" }}
         >
           <GoDotFill />
-          {skill}
+          {typeof(skill)==="string"? skill : skill.name}
         </div>
       ))}
     </div>

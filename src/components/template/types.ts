@@ -5,8 +5,8 @@ export interface ResumeData {
   contact: Contact;
   experience: Experience[];
   education: Education[];
-  skills: string[];
-  language?: string[];
+  skills: string[] | Skills[];
+  language?: string[] | Skills[];
   projects?: Project[];
 }
 
@@ -35,6 +35,13 @@ export interface Education {
   endDate: string;
 }
 
+export type Level = 1 | 2 | 3 | 4 | 4;
+export interface Skills {
+  name: string;
+  level: Level;
+  subtitle: string;
+}
+
 export interface Project {
   name: string;
   description: string;
@@ -43,8 +50,7 @@ export interface Project {
   code?: string;
 }
 
-export type TemplateType = "classic" | "modern";
-
+export type TemplateType = "classic" | "modern" | "tailored";
 
 export type TemplateProps = {
   id: number;

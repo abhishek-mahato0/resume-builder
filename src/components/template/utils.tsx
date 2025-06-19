@@ -16,8 +16,15 @@ import {
   ModernSummary,
 } from "./modern";
 import { ResumeData, TemplateType } from "./types";
+import { IoMdMail } from "react-icons/io";
+import { FaGithub, FaLink, FaLinkedin, FaPhoneAlt } from "react-icons/fa";
+import { MdLocationOn } from "react-icons/md";
+import { TailoredEducation, TailoredExperience, TailoredHeader, TailoredProjects, TailoredSkills, TailoredSummary } from "./tailored";
 
-export const getSectionComponents = (template: TemplateType, data: ResumeData) => {
+export const getSectionComponents = (
+  template: TemplateType,
+  data: ResumeData
+) => {
   const components = {
     classic: {
       header: <ClassicHeader data={data} />,
@@ -37,6 +44,15 @@ export const getSectionComponents = (template: TemplateType, data: ResumeData) =
       language: <ModernSkills skills={data.language || []} title="Language" />,
       projects: <ModernProjects projects={data.projects || []} />,
     },
+    tailored: {
+      header: <TailoredHeader data={data} />,
+      summary: <TailoredSummary summary={data.summary || ""} />,
+      experience: <TailoredExperience experience={data.experience} />,
+      education: <TailoredEducation education={data.education} />,
+      skills: <TailoredSkills skills={data.skills || []} title="Skills" />,
+      language: <TailoredSkills skills={data.language || []} title="Language" />,
+      projects: <TailoredProjects projects={data.projects || []} />,
+    },
   };
 
   return components[template];
@@ -55,3 +71,36 @@ export const getSections = (template: TemplateType, data: ResumeData) => {
     { id: "projects", component: componentMap.projects },
   ];
 };
+
+export const contactInfo = [
+  {
+    label: "Email",
+    value: "email",
+    icon: <IoMdMail />,
+  },
+  {
+    label: "Phone",
+    value: "phone",
+    icon: <FaPhoneAlt />,
+  },
+  {
+    label: "Address",
+    value: "address",
+    icon: <MdLocationOn />,
+  },
+  {
+    label: "Website",
+    value: "website",
+    icon: <FaLink />,
+  },
+  {
+    label: "LinkedIn",
+    value: "linkedin",
+    icon: <FaLinkedin />,
+  },
+  {
+    label: "GitHub",
+    value: "github",
+    icon: <FaGithub />,
+  },
+];

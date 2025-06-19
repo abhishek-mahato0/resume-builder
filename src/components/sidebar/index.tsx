@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ResumeData } from "../template/types";
-import { downloadResumeAsPDF } from "@/utils";
+import { downloadResumeAsPDF } from "@/lib/utils";
 import { RiPrinterLine } from "react-icons/ri";
 
 const Sidebar = ({

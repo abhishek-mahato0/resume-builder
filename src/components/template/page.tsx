@@ -5,11 +5,11 @@ import { ResumeData, TemplateType } from "./types";
 import { useSearchParams } from "next/navigation";
 import { getSections } from "./utils";
 
-const Classic = ({ data }: { data: ResumeData }) => {
+const TemplateLayout = ({ data }: { data: ResumeData }) => {
   const sectionRefs = useRef<any>({});
   const searchParams = useSearchParams();
   const template = (searchParams.get("template") as TemplateType) || "classic";
-  const id = (searchParams.get("id") as string) || "new";
+  // const id = (searchParams.get("id") as string) || "new";
   const [pageBreaks, setPageBreaks] = useState<any>(null);
 
   useEffect(() => {
@@ -57,4 +57,4 @@ const Classic = ({ data }: { data: ResumeData }) => {
   );
 };
 
-export default Classic;
+export default TemplateLayout;

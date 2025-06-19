@@ -1,19 +1,15 @@
 import { FC } from "react";
-import { Contact, Education, Experience, Project, ResumeData } from "../types";
+import {
+  Contact,
+  Education,
+  Experience,
+  Project,
+  ResumeData,
+  Skills,
+} from "../types";
 import Title from "@/components/atoms/Title";
-import { IoMdMail } from "react-icons/io";
-import { FaGithub, FaLink, FaLinkedin, FaPhoneAlt } from "react-icons/fa";
-import { MdLocationOn } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
-
-const contactInfo = [
-  { label: "Email", value: "email", icon: <IoMdMail /> },
-  { label: "Phone", value: "phone", icon: <FaPhoneAlt /> },
-  { label: "Address", value: "address", icon: <MdLocationOn /> },
-  { label: "Website", value: "website", icon: <FaLink /> },
-  { label: "LinkedIn", value: "linkedin", icon: <FaLinkedin /> },
-  { label: "GitHub", value: "github", icon: <FaGithub /> },
-];
+import { contactInfo } from "../utils";
 
 export const ModernHeader: FC<{ data: ResumeData }> = ({ data }) => (
   <header className="text-left flex flex-col gap-1 bg-[#f3f4f6] p-6 rounded-lg shadow-sm border border-[#e5e7eb]">
@@ -90,23 +86,23 @@ export const ModernEducation: FC<{ education: Education[] }> = ({
   </section>
 );
 
-export const ModernSkills: FC<{ skills: string[]; title?: string }> = ({
-  skills,
-  title = "Skills",
-}) => (
+export const ModernSkills: FC<{
+  skills: string[] | Skills[];
+  title?: string;
+}> = ({ skills, title = "Skills" }) => (
   <section className="mt-6">
     <Title title={title} />
     <div className="flex flex-wrap gap-5 list-disc list-inside bg-[#f9fafb] border border-[#d1d5db] rounded-md p-3 text-sm text-[#374151]">
-      {skills.map((skill, index) => (
+      {skills.map((skill) => (
         <div
-          key={skill + index}
+          key={skill.toString()}
           className="flex"
           style={{ alignItems: "center" }}
         >
           <span>
             <GoDotFill />
           </span>
-          <span>{skill}</span>
+          <span>{typeof skill === "string" ? skill : skill.name}</span>
         </div>
       ))}
     </div>

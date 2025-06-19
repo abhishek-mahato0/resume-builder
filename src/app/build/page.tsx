@@ -1,10 +1,10 @@
 "use client";
 import Sidebar from "@/components/sidebar";
 import SideNav from "@/components/sidenav";
-import Classic from "@/components/template/page";
 import { sampleData } from "@/components/template/data";
 import { ResumeData } from "@/components/template/types";
 import React, { useState } from "react";
+import TemplateLayout from "@/components/template/page";
 
 const Build = () => {
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
@@ -22,7 +22,7 @@ const Build = () => {
         } overflow-y-scroll`}
       >
         {resumeData ? (
-          <Classic data={resumeData} />
+          <TemplateLayout data={resumeData} />
         ) : (
           <div className="h-full bg-gray-800 flex items-center justify-center text-white">
             No data yet.

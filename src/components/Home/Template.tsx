@@ -3,12 +3,14 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { TemplateProps } from "../template/types";
+import { templates } from "../template/data";
 
 
 const Template = () => {
   // const { data: session } = useSession();
   const router = useRouter();
-  const handleTemplateClick = (template: TemplateType) => {
+  const handleTemplateClick = (template: TemplateProps) => {
     // if (!session) {
     //   router.push("?login=true&callbackUrl=/build?template=" + template.value);
     //   return;

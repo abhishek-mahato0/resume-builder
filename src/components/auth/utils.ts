@@ -1,5 +1,5 @@
 "use server";
-import { prisma } from "@/db/db";
+import { prisma } from "@/auth/db";
 
 export const handleAuth = async (
   e: React.FormEvent<HTMLFormElement>,

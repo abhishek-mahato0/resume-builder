@@ -90,7 +90,6 @@ export const sampleData: ResumeData = {
       endDate: "2023",
     },
   ],
-
   skills: [
     "React - Expert",
     "TypeScript - Proficient",
@@ -165,5 +164,11 @@ export const templates: TemplateProps[] = [
     title: "Modern Resume",
     preview: "/templates/modern.png",
     value: "modern",
+  },
+  {
+    id: 3,
+    title: "Tailored Modern",
+    preview: "/template/tailored.png",
+    value: "tailored",
   },
 ];
