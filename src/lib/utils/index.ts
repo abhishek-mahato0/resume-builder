@@ -63,3 +63,9 @@ export function debounce<T extends (...args: any[]) => void>(
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export const getInitials = (name: string) => {
+  if (!name) return "";
+  const names = name?.split(" ");
+  return `${names?.[0]?.[0]}${names?.[1]?.[0]}`;
+};

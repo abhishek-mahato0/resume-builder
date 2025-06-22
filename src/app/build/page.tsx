@@ -8,18 +8,12 @@ import TemplateLayout from "@/components/template/page";
 
 const Build = () => {
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
-  const [isSideNavCollapsed, setIsSideNavCollapsed] = useState(false);
 
   return (
     <div className="flex w-full h-screen overflow-hidden">
-      <SideNav
-        onCollapse={() => setIsSideNavCollapsed(!isSideNavCollapsed)}
-        isCollapsed={isSideNavCollapsed}
-      />
+      <SideNav />
       <div
-        className={`transition-all duration-300 ease-in-out flex-1 ${
-          isSideNavCollapsed ? "lg:w-[70%]" : "lg:w-[50%]"
-        } overflow-y-scroll`}
+        className={`transition-all duration-300 ease-in-out flex-1 w-auto overflow-y-scroll`}
       >
         {resumeData ? (
           <TemplateLayout data={resumeData} />

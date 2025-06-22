@@ -1,4 +1,5 @@
 "use server";
+import { signIn } from "@/auth";
 import { prisma } from "@/auth/db";
 
 export const handleAuth = async (
@@ -16,9 +17,7 @@ export const handleAuth = async (
   }
 };
 
-export const handleRegister = async (name,email, password) => {
-  
-};
+export const handleRegister = async (name, email, password) => {};
 
 export const handleLogin = async (email, password) => {};
 
@@ -45,3 +44,9 @@ export const createUser = async () => {
     throw err;
   }
 };
+
+export async function SignIn(url: string) {
+  await signIn("google", {
+    callbackUrl: url || "/dashboard",
+  });
+}

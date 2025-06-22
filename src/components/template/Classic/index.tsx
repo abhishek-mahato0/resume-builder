@@ -1,9 +1,15 @@
 import { FC } from "react";
-import { Contact, Education, Experience, Project, ResumeData, Skills } from "../types";
+import {
+  Contact,
+  Education,
+  Experience,
+  Project,
+  ResumeData,
+  Skills,
+} from "../types";
 import Title from "@/components/atoms/Title";
 import { GoDotFill } from "react-icons/go";
 import { contactInfo } from "../utils";
-
 
 export const ClassicHeader: FC<{ data: ResumeData }> = ({ data }) => (
   <header className="text-center flex flex-col gap-2">
@@ -77,13 +83,13 @@ export const ClassicEducationSection: FC<{ education: Education[] }> = ({
   </section>
 );
 
-export const ClassicSkills: FC<{ skills: string[] | Skills[]; title: string }> = ({
-  skills,
-  title = "Skills",
-}) => (
+export const ClassicSkills: FC<{
+  skills: string[] | Skills[];
+  title: string;
+}> = ({ skills, title = "Skills" }) => (
   <section>
     <Title title={title} />
-    <div className="flex flex-wrap gap-3 list-disc list-inside p-3 text-sm text-[#374151]">
+    <div className=" flex flex-wrap gap-3 list-disc list-inside py-3 px-4 text-sm text-[#374151]">
       {skills.map((skill) => (
         <div
           key={skill.toString()}
@@ -91,7 +97,7 @@ export const ClassicSkills: FC<{ skills: string[] | Skills[]; title: string }> =
           style={{ alignItems: "center" }}
         >
           <GoDotFill />
-          {typeof(skill)==="string"? skill : skill.name}
+          {typeof skill === "string" ? skill : skill.name}
         </div>
       ))}
     </div>
@@ -104,25 +110,16 @@ export const ClassicProjects: FC<{ projects?: Project[] }> = ({ projects }) => {
     <section>
       <Title title="Projects" />
       {projects.map((proj, i) => (
-        <div key={i} className="mb-2 text-[#374151]">
-          <div className="flex justify-between text-sm font-medium">
-            <span>{proj.name}</span>
-            {proj.live && (
-              <a
-                href={proj.live}
-                className="underline ml-2"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: "#2563EB" }}
-              >
-                Live
-              </a>
-            )}
+        <div key={i} className="mb-3 text-[#374151]">
+          <div className="flex justify-between flex-col gap-[0.5px] text-sm font-medium">
+            <span className="font-[550]">{proj.name}</span>
+            <p className="text-sm">{proj.description}</p>
+            <p className="text-xs italic text-[#4B5563]">
+              Tech: {proj.tech.join(", ")}
+            </p>
+            {proj.live && <p className="text-sm">Live: {proj.live}</p>}
+            {proj.code && <p className="text-sm">Code: {proj.code}</p>}
           </div>
-          <p className="text-sm">{proj.description}</p>
-          <p className="text-xs italic text-[#4B5563]">
-            Tech: {proj.tech.join(", ")}
-          </p>
         </div>
       ))}
     </section>

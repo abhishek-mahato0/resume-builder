@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from "../ui/Dialog";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { handleAuth} from "./utils";
+import { handleAuth } from "./utils";
 import { FaGoogle } from "react-icons/fa";
 import Button from "../ui/Button";
 import { signIn } from "next-auth/react";
@@ -27,12 +27,22 @@ const Login = () => {
     router.replace(`${pathname}?${params.toString()}`);
   };
 
+  const handleSignIn = async () => {
+    const res = await signIn("google", {
+      callbackUrl: searchParams.get("callbackUrl") || "/dashboard",
+    });
+    console.log("Sign in response:", res);
+  };
+
   return (
-    <Dialog open={true} onOpenChange={(open:boolean) => !open && router.push("/")}>
+    <Dialog
+      open={true}
+      onOpenChange={(open: boolean) => !open && router.push("/")}
+    >
       <DialogContent
         showCloseButton
-        onInteractOutside={(e:any) => e.preventDefault()}
-        onEscapeKeyDown={(e:any) => e.preventDefault()}
+        onInteractOutside={(e: any) => e.preventDefault()}
+        onEscapeKeyDown={(e: any) => e.preventDefault()}
       >
         <DialogHeader>
           <DialogTitle>
@@ -106,11 +116,7 @@ const Login = () => {
               <button
                 type="button"
                 className="w-full flex items-center justify-center gap-3 bg-white text-black font-medium py-2 rounded-md shadow hover:bg-gray-100 transition"
-                onClick={async () =>
-                  await signIn("google", {
-                    callbackUrl: `${searchParams.get("callbackUrl")}`,
-                  })
-                }
+                onClick={handleSignIn}
               >
                 <FaGoogle className="text-xl" />
                 Sign in with Google

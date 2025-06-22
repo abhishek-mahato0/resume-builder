@@ -14,7 +14,7 @@ const TemplateLayout = ({ data }: { data: ResumeData }) => {
 
   useEffect(() => {
     let accumulatedHeight = 0;
-    const pageLimit = 1123; // A4 size at 96 DPI
+    const pageLimit = 700; // A4 size at 96 DPI
     const breakPoints: string[] = [];
 
     for (const section of getSections(template, data)) {
@@ -36,7 +36,7 @@ const TemplateLayout = ({ data }: { data: ResumeData }) => {
 
   return (
     <div
-      className="max-w-3xl mx-auto bg-[#ffffff] text-[#000000] font-serif p-8 shadow-lg border space-y-6"
+      className="max-w-3xl mx-auto bg-[#ffffff] text-[#000000] font-serif p-8 shadow-lg space-y-6"
       id="classic-resume"
     >
       {getSections(template, data).map((section) => {

@@ -1,11 +1,8 @@
 "use client";
-import { useSession } from "next-auth/react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { TemplateProps } from "../template/types";
 import { templates } from "../template/data";
-
 
 const Template = () => {
   // const { data: session } = useSession();
@@ -27,13 +24,13 @@ const Template = () => {
             className="rounded-xl p-4 cursor-pointer transition"
             onClick={() => handleTemplateClick(template)}
           >
-            <Image
+            {/* <Image
               src={template.preview}
               alt={template.title}
               width={300}
               height={180}
               className="rounded-lg"
-            />
+            /> */}
             <h3 className="mt-2 text-gray-400">{template.title}</h3>
           </div>
         ))}

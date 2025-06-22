@@ -19,7 +19,14 @@ import { ResumeData, TemplateType } from "./types";
 import { IoMdMail } from "react-icons/io";
 import { FaGithub, FaLink, FaLinkedin, FaPhoneAlt } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
-import { TailoredEducation, TailoredExperience, TailoredHeader, TailoredProjects, TailoredSkills, TailoredSummary } from "./tailored";
+import {
+  TailoredEducation,
+  TailoredExperience,
+  TailoredHeader,
+  TailoredProjects,
+  TailoredSkills,
+  TailoredSummary,
+} from "./tailored";
 
 export const getSectionComponents = (
   template: TemplateType,
@@ -32,7 +39,13 @@ export const getSectionComponents = (
       experience: <ClassicExperienceSection experience={data.experience} />,
       education: <ClassicEducationSection education={data.education} />,
       skills: <ClassicSkills skills={data.skills || []} title="Skills" />,
-      language: <ClassicSkills skills={data.language || []} title="Language" />,
+      ...(data.language && data.language.length > 0
+        ? {
+            language: (
+              <ClassicSkills skills={data.language || []} title="Language" />
+            ),
+          }
+        : null),
       projects: <ClassicProjects projects={data.projects || []} />,
     },
     modern: {
@@ -41,7 +54,13 @@ export const getSectionComponents = (
       experience: <ModernExperience experience={data.experience} />,
       education: <ModernEducation education={data.education} />,
       skills: <ModernSkills skills={data.skills || []} title="Skills" />,
-      language: <ModernSkills skills={data.language || []} title="Language" />,
+      ...(data.language && data.language.length > 0
+        ? {
+            language: (
+              <ModernSkills skills={data.language || []} title="Language" />
+            ),
+          }
+        : null),
       projects: <ModernProjects projects={data.projects || []} />,
     },
     tailored: {
@@ -50,7 +69,13 @@ export const getSectionComponents = (
       experience: <TailoredExperience experience={data.experience} />,
       education: <TailoredEducation education={data.education} />,
       skills: <TailoredSkills skills={data.skills || []} title="Skills" />,
-      language: <TailoredSkills skills={data.language || []} title="Language" />,
+      ...(data.language && data.language.length > 0
+        ? {
+            language: (
+              <TailoredSkills skills={data.language || []} title="Language" />
+            ),
+          }
+        : null),
       projects: <TailoredProjects projects={data.projects || []} />,
     },
   };
@@ -66,7 +91,9 @@ export const getSections = (template: TemplateType, data: ResumeData) => {
     { id: "summary", component: componentMap.summary },
     { id: "experience", component: componentMap.experience },
     { id: "skills", component: componentMap.skills },
-    { id: "language", component: componentMap.language },
+    ...(componentMap?.language
+      ? [{ id: "language", component: componentMap.language }]
+      : []),
     { id: "education", component: componentMap.education },
     { id: "projects", component: componentMap.projects },
   ];

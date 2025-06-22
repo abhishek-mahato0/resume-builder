@@ -12,6 +12,7 @@ model User {
   name          String?
   email         String?         @unique
   emailVerified DateTime?
+  password      String?         @db.String
   image         String?
   accounts      Account[]
   sessions      Session[]
@@ -20,6 +21,10 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  UserInfo UserInfo[]
+
+  Contact Contact[]
 }
 
 model Account {
@@ -78,4 +83,53 @@ model Authenticator {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, credentialID])
+}
+
+model Contact {
+  id     String @id @default(uuid()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+
+  name    String
+  title   String
+  summary String
+
+  email    String
+  phone    String
+  website  String
+  linkedin String
+  github   String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserInfo {
+  id          String   @id @default(uuid()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  createdDate DateTime @default(now())
+  templateId  String?
+
+  name    String
+  title   String
+  summary String
+
+  email    String
+  phone    String
+  website  String
+  linkedin String
+  github   String
+
+  experience Json
+  education  Json
+  projects   Json
+
+  skills   Json
+  language Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
