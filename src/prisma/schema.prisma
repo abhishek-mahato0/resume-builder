@@ -86,13 +86,10 @@ model Authenticator {
 }
 
 model Contact {
-  id     String @id @default(uuid()) @map("_id") @db.ObjectId
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
   userId String @db.ObjectId
 
-  name    String
-  title   String
-  summary String
-
+  name     String
   email    String
   phone    String
   website  String
@@ -106,7 +103,7 @@ model Contact {
 }
 
 model UserInfo {
-  id          String   @id @default(uuid()) @map("_id") @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   userId      String   @db.ObjectId
   createdDate DateTime @default(now())
   templateId  String?
@@ -115,11 +112,7 @@ model UserInfo {
   title   String
   summary String
 
-  email    String
-  phone    String
-  website  String
-  linkedin String
-  github   String
+  contact Json
 
   experience Json
   education  Json

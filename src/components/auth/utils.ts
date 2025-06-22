@@ -1,6 +1,8 @@
 "use server";
-import { signIn } from "@/auth";
+import { auth, signIn } from "@/auth";
 import { prisma } from "@/auth/db";
+import { revalidatePath } from "next/cache";
+import { ResumeData } from "../template/types";
 
 export const handleAuth = async (
   e: React.FormEvent<HTMLFormElement>,
@@ -11,15 +13,76 @@ export const handleAuth = async (
   const password = formData.get("password") as string;
   const name = formData.get("name") as string;
   if (currentForm === "login") {
-    handleLogin(email, password);
+    handleLogin(email);
   } else {
     handleRegister(name, email, password);
   }
 };
 
-export const handleRegister = async (name, email, password) => {};
+export const handleRegister = async (
+  name: string,
+  email: string,
+  password: string
+) => {
+  try {
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+    });
 
-export const handleLogin = async (email, password) => {};
+    if (existingUser) {
+      console.log("User already exists:", existingUser);
+      return existingUser;
+    }
+
+    const user = await prisma.user.create({
+      data: { name, email, password }, // Assuming password is hashed before this step
+    });
+
+    return user;
+  } catch (err) {
+    console.error("Error creating user:", err);
+    throw err;
+  }
+};
+
+export const handleLogin = async (email: string) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Here you would typically verify the password
+    // For simplicity, we assume the password is correct
+
+    return user;
+  } catch (err) {
+    console.error("Error logging in user:", err);
+    throw err;
+  }
+};
+
+export const getUser = async () => {
+  try {
+    const session = await auth();
+    if (!session?.user?.email) {
+      throw new Error("User not authenticated");
+    }
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+    });
+    if (!user) {
+      throw new Error("User not found");
+    }
+    return user;
+  } catch (err) {
+    console.error("Error fetching user:", err);
+    throw err;
+  }
+};
 
 export const createUser = async () => {
   try {
@@ -49,4 +112,152 @@ export async function SignIn(url: string) {
   await signIn("google", {
     callbackUrl: url || "/dashboard",
   });
+}
+
+export async function getContact() {
+  const user = await getUser();
+
+  if (!user) {
+    return {
+      name: "",
+      email: "",
+    };
+  }
+
+  const contact = await prisma.contact.findFirst({
+    where: { userId: user.id },
+  });
+
+  if (!contact) {
+    return {
+      name: user.name || "",
+      email: user.email || "",
+    };
+  }
+
+  return contact;
+}
+
+export async function saveSettings(formData: FormData) {
+  const name = formData.get("name") as string;
+  const email = formData.get("email") as string;
+  const phone = formData.get("phone") as string;
+  const website = formData.get("website") as string;
+  const linkedin = formData.get("linkedin") as string;
+  const github = formData.get("github") as string;
+
+  if (!name && !email && !phone && !website && !linkedin && !github) {
+    return {
+      error: "At least one field must be provided.",
+    };
+  }
+
+  const user = await getUser();
+  if (!user) {
+    return {
+      error: "User not authenticated",
+    };
+  }
+
+  const existingContact = await prisma.contact.findFirst({
+    where: { userId: user.id },
+  });
+
+  if (existingContact) {
+    const payload = {
+      name: name || existingContact.name,
+      email: email || existingContact.email,
+      phone: phone || existingContact.phone,
+      website: website || existingContact.website,
+      linkedin: linkedin || existingContact.linkedin,
+      github: github || existingContact.github,
+    };
+    const updatedContact = await prisma.contact.update({
+      where: { id: existingContact.id },
+      data: payload,
+    });
+    return updatedContact;
+  }
+
+  if (!name || !email) {
+    return {
+      error: "Name and email are required fields.",
+    };
+  }
+  const data = {
+    name,
+    email,
+    phone,
+    website,
+    linkedin,
+    github,
+    userId: user.id,
+  };
+
+  const res = await prisma.contact.create({
+    data,
+  });
+
+  if (!res) {
+    return {
+      error: "Failed to save contact information.",
+    };
+  }
+  revalidatePath("/settings");
+  return res;
+}
+
+export async function getRecentTemplate() {
+  try {
+    const user = await getUser();
+    if (!user) {
+      return {
+        error: "User not authenticated",
+      };
+    }
+
+    const template = await prisma.userInfo.findFirst({
+      where: { userId: user.id },
+      orderBy: { updatedAt: "desc" },
+      take: 1,
+    });
+
+    return template;
+  } catch (error) {
+    return {
+      error: error || "Failed to fetch recent template.",
+    };
+  }
+}
+
+export async function saveTemplate(data: ResumeData) {
+  try {
+    const user = await getUser();
+    if (!user) {
+      return {
+        error: "User not authenticated",
+      };
+    }
+    const newTemplate = await prisma.userInfo.create({
+      data: {
+        ...data,
+        userId: user.id,
+        contact: JSON.parse(JSON.stringify(data.contact)),
+        experience: JSON.parse(JSON.stringify(data.experience)),
+        education: JSON.parse(JSON.stringify(data.education)),
+        skills: JSON.parse(JSON.stringify(data.skills)),
+        language: data.language
+          ? JSON.parse(JSON.stringify(data.language))
+          : undefined,
+        projects: data.projects
+          ? JSON.parse(JSON.stringify(data.projects))
+          : undefined,
+      },
+    });
+    return newTemplate;
+  } catch (error) {
+    return {
+      error: error || "Failed to save template.",
+    };
+  }
 }

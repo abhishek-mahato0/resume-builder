@@ -1,21 +1,21 @@
 import { ResumeData, TemplateProps } from "./types";
 
 export const sampleData: ResumeData = {
-  name: "Abhishek Mahato",
+  name: "Harry Maguire",
   title: "Full Stack Developer",
   summary: `Enthusiastic MERN stack developer with experience in building scalable applications, optimizing frontend performance, and integrating AI APIs. Passionate about building intuitive user experiences.`,
 
   contact: {
-    email: "abhishek@example.com",
+    email: "harry@gmail.com",
     phone: "+977-9800000000",
-    website: "https://abhishek.dev",
-    linkedin: "linkedin.com/in/abhishek-mahato",
-    github: "github.com/aa",
+    website: "https://harry.dev",
+    linkedin: "linkedin.com/in/harry.com",
+    github: "github.com/harry-0",
   },
 
   experience: [
     {
-      company: "NAXA INten",
+      company: "ABC Intern",
       role: "React Developer",
       startDate: "Jan 2023",
       endDate: "Oct 2023",
@@ -26,51 +26,7 @@ export const sampleData: ResumeData = {
       ],
     },
     {
-      company: "NAXA INten",
-      role: "React Developer",
-      startDate: "Jan 2023",
-      endDate: "Oct 2023",
-      description: [
-        "Built modular UI components using React and Redux.",
-        "Integrated Maplibre/OpenLayers for geospatial features.",
-        "Optimized app performance using memoization and lazy loading.",
-      ],
-    },
-    {
-      company: "NAXA INtensss",
-      role: "React Developer",
-      startDate: "Jan 2023",
-      endDate: "Oct 2023",
-      description: [
-        "Built modular UI components using React and Redux.",
-        "Integrated Maplibre/OpenLayers for geospatial features.",
-        "Optimized app performance using memoization and lazy loading.",
-      ],
-    },
-    {
-      company: "NAXA INtenssss",
-      role: "React Developer",
-      startDate: "Jan 2023",
-      endDate: "Oct 2023",
-      description: [
-        "Built modular UI components using React and Redux.",
-        "Integrated Maplibre/OpenLayers for geospatial features.",
-        "Optimized app performance using memoization and lazy loading.",
-      ],
-    },
-    {
-      company: "NAXA",
-      role: "React Developer",
-      startDate: "Jan 2023",
-      endDate: "Oct 2023",
-      description: [
-        "Built modular UI components using React and Redux.",
-        "Integrated Maplibre/OpenLayers for geospatial features.",
-        "Optimized app performance using memoization and lazy loading.",
-      ],
-    },
-    {
-      company: "Innovate Tech",
+      company: "XYZ Solutions",
       role: "Full Stack Developer",
       startDate: "Nov 2023",
       endDate: "Present",
@@ -78,6 +34,17 @@ export const sampleData: ResumeData = {
         "Migrated state management from Redux Saga to React Query.",
         "Led the refactor of TypeScript migration for core modules.",
         "Worked on integrating ChatGPT API into enterprise tools.",
+      ],
+    },
+    {
+      company: "Tech Innovators",
+      role: "Frontend Developer",
+      startDate: "Jan 2022",
+      endDate: "Dec 2022",
+      description: [
+        "Developed responsive web applications using React and Tailwind CSS.",
+        "Implemented real-time data visualization with custom charts.",
+        "Collaborated with designers to enhance user experience.",
       ],
     },
   ],

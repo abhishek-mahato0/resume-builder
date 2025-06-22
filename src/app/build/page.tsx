@@ -1,31 +1,14 @@
-"use client";
-import Sidebar from "@/components/sidebar";
-import SideNav from "@/components/sidenav";
-import { sampleData } from "@/components/template/data";
+import { getContact, getRecentTemplate } from "@/components/auth/utils";
+import Build from "@/components/molecules/Build";
 import { ResumeData } from "@/components/template/types";
-import React, { useState } from "react";
-import TemplateLayout from "@/components/template/page";
 
-const Build = () => {
-  const [resumeData, setResumeData] = useState<ResumeData | null>(null);
-
-  return (
-    <div className="flex w-full h-screen overflow-hidden">
-      <SideNav />
-      <div
-        className={`transition-all duration-300 ease-in-out flex-1 w-auto overflow-y-scroll`}
-      >
-        {resumeData ? (
-          <TemplateLayout data={resumeData} />
-        ) : (
-          <div className="h-full bg-gray-800 flex items-center justify-center text-white">
-            No data yet.
-          </div>
-        )}
-      </div>
-      <Sidebar sampleData={sampleData} onDataChange={setResumeData} />
-    </div>
-  );
+const page = async () => {
+  const templateInfo = await getRecentTemplate();
+  if (!templateInfo) {
+    const contact = await getContact();
+    return <Build contact={contact} />;
+  }
+  return <Build template={templateInfo as unknown as ResumeData} />;
 };
 
-export default Build;
+export default page;

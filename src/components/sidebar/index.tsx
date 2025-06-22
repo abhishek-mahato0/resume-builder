@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import { ResumeData } from "../template/types";
 import { downloadResumeAsPDF } from "@/lib/utils";
 import { RiPrinterLine } from "react-icons/ri";
+import { saveTemplate } from "../auth/utils";
+import { toast } from "sonner";
+import { useSearchParams } from "next/navigation";
+import { validateResume } from "../template/zodSchema";
 
 const Sidebar = ({
   sampleData,
@@ -12,6 +16,8 @@ const Sidebar = ({
 }) => {
   const [jsonText, setJsonText] = useState(""); // editable text
   const [parsedJson, setParsedJson] = useState<ResumeData | null>(null);
+  const searchParams = useSearchParams();
+  const template = (searchParams.get("template") as string) || "classic";
   const [isValid, setIsValid] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -37,31 +43,49 @@ const Sidebar = ({
     }
   };
 
-  const saveResume = async () => {
+  const saveResume = async (jsonData: ResumeData) => {
+    try {
+      await saveTemplate({ ...jsonData, templateId: template });
+      toast.success("✅ Resume saved successfully!");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      toast.error(
+        "❌ Failed to save resume: " + (error?.message || "Unknown error")
+      );
+      setIsLoading(false);
+      return;
+    }
+  };
+  const downloadResume = async () => {
     setIsLoading(true);
     if (!parsedJson) {
-      alert("❌ No data to save.");
       setIsLoading(false);
       return;
     }
     const isDownloaded = await downloadResumeAsPDF(
       "classic-resume",
-      "resume.pdf"
+      parsedJson.title || "My Resume"
     );
+
     if (isDownloaded) {
-      alert("✅ Resume saved successfully!");
+      const { data, error } = validateResume(parsedJson);
+      if (error) {
+        toast.error("❌ Invalid JSON data: " + JSON.stringify(error));
+        setIsLoading(false);
+        return;
+      }
+      await saveResume(data as ResumeData);
     } else {
-      alert("❌ Failed to save resume.");
+      toast.error("❌ Failed to download resume.");
     }
     setIsLoading(false);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (isValid && parsedJson) {
-      alert("✅ Data saved successfully!");
-      // You can replace this with actual save logic
+      await saveResume(parsedJson);
     } else {
-      alert("❌ Cannot save. Fix JSON syntax.");
+      toast.error("❌ Invalid JSON data. Please fix errors before saving.");
     }
   };
 
@@ -79,12 +103,12 @@ const Sidebar = ({
       {/* Buttons */}
       <div className="flex gap-2">
         <button
-          onClick={saveResume}
+          onClick={downloadResume}
           className="px-3 py-2 bg-blue-600 rounded text-sm cursor-pointer flex gap-1 items-center"
           disabled={isLoading}
         >
           <RiPrinterLine />
-          <span>{isLoading ? "Printing..." : "Print"}</span>
+          <span>{isLoading ? "Downloading..." : "Download"}</span>
         </button>
         <button
           onClick={handleSave}
