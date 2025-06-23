@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ResumeData } from "../template/types";
-import { downloadResumeAsPDF } from "@/lib/utils";
+import { downloadPDF2, downloadResumeAsPDF } from "@/lib/utils";
 import { RiPrinterLine } from "react-icons/ri";
 import { saveTemplate } from "../auth/utils";
 import { toast } from "sonner";
@@ -62,22 +62,22 @@ const Sidebar = ({
       setIsLoading(false);
       return;
     }
-    const isDownloaded = await downloadResumeAsPDF(
+    const isDownloaded = await downloadPDF2(
       "classic-resume",
       parsedJson.title || "My Resume"
     );
 
-    if (isDownloaded) {
-      const { data, error } = validateResume(parsedJson);
-      if (error) {
-        toast.error("❌ Invalid JSON data: " + JSON.stringify(error));
-        setIsLoading(false);
-        return;
-      }
-      await saveResume(data as ResumeData);
-    } else {
-      toast.error("❌ Failed to download resume.");
-    }
+    // if (isDownloaded) {
+    //   const { data, error } = validateResume(parsedJson);
+    //   if (error) {
+    //     toast.error("❌ Invalid JSON data: " + JSON.stringify(error));
+    //     setIsLoading(false);
+    //     return;
+    //   }
+    //   await saveResume(data as ResumeData);
+    // } else {
+    //   toast.error("❌ Failed to download resume.");
+    // }
     setIsLoading(false);
   };
 

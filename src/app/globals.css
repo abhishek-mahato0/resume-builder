@@ -27,4 +27,9 @@ body {
 
 .page-break {
   page-break-before: always;
+  break-before: always;
+}
+
+.page-break-marker {
+  break-before: page;
 }

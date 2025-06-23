@@ -67,3 +67,14 @@ export function validateResume(raw: any) {
   // Cleaned and typed data
   return { data: result.data };
 }
+
+export const SettingsSchema = z.object({
+  name: z.string().optional(),
+  email: z.string().email().optional(),
+  phone: z.string().optional(),
+  website: z.string().optional(),
+  linkedin: z.string().optional(),
+  github: z.string().optional(),
+  twitter: z.string().optional(),
+  templateId: z.string().optional(),
+});

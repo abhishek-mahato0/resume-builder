@@ -36,21 +36,29 @@ const TemplateLayout = ({ data }: { data: ResumeData }) => {
 
   return (
     <div
-      className="max-w-3xl mx-auto bg-[#ffffff] text-[#000000] font-serif p-8 shadow-lg space-y-6"
+      className="w-[794px] mx-auto bg-[#ffffff] text-[#000000] font-serif p-8 shadow-lg space-y-6"
       id="classic-resume"
     >
       {getSections(template, data).map((section) => {
         const shouldBreakBefore = pageBreaks?.includes(section.id);
         return (
-          <div
-            key={section.id}
-            ref={(el) => {
-              sectionRefs.current[section.id] = el;
-            }}
-            className={shouldBreakBefore ? "page-break" : ""}
-          >
-            {section.component}
-          </div>
+          <>
+            {shouldBreakBefore && (
+              <div
+                className="page-break-marker"
+                data-break-after={section.id}
+              ></div>
+            )}
+
+            <div
+              key={section.id}
+              ref={(el) => {
+                sectionRefs.current[section.id] = el;
+              }}
+            >
+              {section.component}
+            </div>
+          </>
         );
       })}
     </div>
