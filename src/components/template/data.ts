@@ -86,36 +86,6 @@ export const sampleData: ResumeData = {
       live: "https://resume-builder.dev",
       code: "https://resumr/dd",
     },
-    {
-      name: "My Second Teacher Clone",
-      description:
-        "A learning platform clone with scribble, video notes, and resources system.",
-      tech: ["React", "Redux", "Node.js"],
-    },
-    {
-      name: "ResumeGPT",
-      description:
-        "A resume builder that tailors resumes using ChatGPT and customizable templates.",
-      tech: ["React", "Tailwind", "OpenAI API"],
-      live: "https://resume-builder.dev",
-      code: "https://resumr/dd",
-    },
-    {
-      name: "ResumeGPT",
-      description:
-        "A resume builder that tailors resumes using ChatGPT and customizable templates.",
-      tech: ["React", "Tailwind", "OpenAI API"],
-      live: "https://resume-builder.dev",
-      code: "https://resumr/dd",
-    },
-    {
-      name: "ResumeGPT",
-      description:
-        "A resume builder that tailors resumes using ChatGPT and customizable templates.",
-      tech: ["React", "Tailwind", "OpenAI API"],
-      live: "https://resume-builder.dev",
-      code: "https://resumr/dd",
-    },
   ],
 };
 

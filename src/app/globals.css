@@ -24,12 +24,3 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
-
-.page-break {
-  page-break-before: always;
-  break-before: always;
-}
-
-.page-break-marker {
-  break-before: page;
-}

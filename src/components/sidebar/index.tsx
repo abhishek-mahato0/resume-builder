@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { ResumeData } from "../template/types";
-import { downloadPDF2, downloadResumeAsPDF } from "@/lib/utils";
 import { RiPrinterLine } from "react-icons/ri";
 import { saveTemplate } from "../auth/utils";
 import { toast } from "sonner";
 import { useSearchParams } from "next/navigation";
 import { validateResume } from "../template/zodSchema";
+import { downloadPDF } from "@/lib/utils";
 
 const Sidebar = ({
   sampleData,
@@ -62,22 +62,22 @@ const Sidebar = ({
       setIsLoading(false);
       return;
     }
-    const isDownloaded = await downloadPDF2(
+    const isDownloaded = await downloadPDF(
       "classic-resume",
       parsedJson.title || "My Resume"
     );
 
-    // if (isDownloaded) {
-    //   const { data, error } = validateResume(parsedJson);
-    //   if (error) {
-    //     toast.error("❌ Invalid JSON data: " + JSON.stringify(error));
-    //     setIsLoading(false);
-    //     return;
-    //   }
-    //   await saveResume(data as ResumeData);
-    // } else {
-    //   toast.error("❌ Failed to download resume.");
-    // }
+    if (isDownloaded) {
+      const { data, error } = validateResume(parsedJson);
+      if (error) {
+        toast.error("❌ Invalid JSON data: " + JSON.stringify(error));
+        setIsLoading(false);
+        return;
+      }
+      await saveResume(data as ResumeData);
+    } else {
+      toast.error("❌ Failed to download resume.");
+    }
     setIsLoading(false);
   };
 
@@ -119,7 +119,7 @@ const Sidebar = ({
       </div>
 
       {/* JSON Editor */}
-      <div className="flex-1 bg-gray-100 text-black overflow-y-scroll border border-gray-300 rounded">
+      <div className="flex-1 bg-gray-100 text-black border border-gray-300 rounded">
         <textarea
           value={jsonText}
           onChange={(e) => handleRawJsonChange(e.target.value)}

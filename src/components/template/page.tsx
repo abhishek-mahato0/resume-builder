@@ -14,7 +14,7 @@ const TemplateLayout = ({ data }: { data: ResumeData }) => {
 
   useEffect(() => {
     let accumulatedHeight = 0;
-    const pageLimit = 700; // A4 size at 96 DPI
+    const pageLimit = 900; // A4 size at 96 DPI
     const breakPoints: string[] = [];
 
     for (const section of getSections(template, data)) {
@@ -25,7 +25,7 @@ const TemplateLayout = ({ data }: { data: ResumeData }) => {
 
       if (accumulatedHeight + height > pageLimit) {
         breakPoints.push(section.id);
-        accumulatedHeight = height; // reset for next page
+        accumulatedHeight = 0; // reset for next page
       } else {
         accumulatedHeight += height;
       }
@@ -34,22 +34,19 @@ const TemplateLayout = ({ data }: { data: ResumeData }) => {
     setPageBreaks(breakPoints); // store the points where a new page should start
   }, []);
 
+
   return (
     <div
-      className="w-[794px] mx-auto bg-[#ffffff] text-[#000000] font-serif p-8 shadow-lg space-y-6"
+      className="w-[794px] mx-auto bg-[#ffffff] text-[#201f1f] font-serif p-8 shadow-lg space-y-6"
       id="classic-resume"
     >
       {getSections(template, data).map((section) => {
         const shouldBreakBefore = pageBreaks?.includes(section.id);
         return (
           <>
-            {shouldBreakBefore && (
-              <div
-                className="page-break-marker"
-                data-break-after={section.id}
-              ></div>
-            )}
-
+            {shouldBreakBefore ? (
+              <div className="html2pdf__page-break"></div>
+            ) : null}
             <div
               key={section.id}
               ref={(el) => {
