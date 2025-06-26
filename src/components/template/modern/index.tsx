@@ -10,6 +10,7 @@ import {
 import Title from "@/components/atoms/Title";
 import { GoDotFill } from "react-icons/go";
 import { contactInfo } from "../utils";
+import ProjectsLinks from "../components/ProjectsLinks";
 
 export const ModernHeader: FC<{ data: ResumeData }> = ({ data }) => (
   <header className="text-left flex flex-col gap-1 bg-[#f3f4f6] p-6 rounded-lg shadow-sm border border-[#e5e7eb]">
@@ -31,7 +32,7 @@ export const ModernHeader: FC<{ data: ResumeData }> = ({ data }) => (
 export const ModernSummary: FC<{ summary: string }> = ({ summary }) => (
   <section className="mt-6">
     <Title title="Summary" />
-    <p className="text-[#374151] leading-relaxed text-justify bg-[#ffffff] p-4 rounded-md border border-[#e5e7eb]">
+    <p className="text-[#374151] leading-relaxed text-justify  p-4 rounded-md border border-[#e5e7eb]">
       {summary}
     </p>
   </section>
@@ -45,11 +46,14 @@ export const ModernExperience: FC<{ experience: Experience[] }> = ({
     {experience.map((exp, idx) => (
       <div
         key={idx}
-        className="p-4 mb-4 bg-[#f9fafb] border border-[#d1d5db] rounded-md shadow-sm"
+        className="p-4 mb-4  border border-[#d1d5db] rounded-md shadow-sm"
       >
         <div className="flex justify-between text-sm font-semibold text-[#111827]">
-          <span>
+          <span className="flex flex-col">
             {exp.role} @ {exp.company}
+            <span className="text-sm font-normal text-[#374151]">
+              {exp.location}
+            </span>
           </span>
           <span className="italic">
             {exp.startDate} – {exp.endDate}
@@ -73,7 +77,7 @@ export const ModernEducation: FC<{ education: Education[] }> = ({
     {education.map((edu, idx) => (
       <div
         key={idx}
-        className="text-sm flex justify-between items-center p-3 border border-[#d1d5db] rounded-md bg-[#ffffff] mb-2 text-[#1f2937]"
+        className="text-sm flex justify-between items-center p-3 border border-[#d1d5db] rounded-md mb-2 text-[#1f2937]"
       >
         <span>
           <strong>{edu.degree}</strong> – {edu.school}
@@ -92,7 +96,7 @@ export const ModernSkills: FC<{
 }> = ({ skills, title = "Skills" }) => (
   <section className="mt-6">
     <Title title={title} />
-    <div className="flex flex-wrap gap-5 list-disc list-inside bg-[#f9fafb] border border-[#d1d5db] rounded-md p-3 text-sm text-[#374151]">
+    <div className="flex flex-wrap gap-5 list-disc list-inside  border border-[#d1d5db] rounded-md p-3 text-sm text-[#374151]">
       {skills.map((skill) => (
         <div
           key={skill.toString()}
@@ -117,25 +121,26 @@ export const ModernProjects: FC<{ projects?: Project[] }> = ({ projects }) => {
       {projects.map((proj, i) => (
         <div
           key={i}
-          className="mb-3 p-4 border border-[#d1d5db] rounded-md bg-[#ffffff] shadow-sm"
+          className="mb-3 p-4 border border-[#d1d5db] rounded-md shadow-sm"
         >
           <div className="flex justify-between text-sm font-medium text-[#1f2937]">
             <span>{proj.name}</span>
-            {proj.live && (
-              <a
-                href={proj.live}
-                className="text-[#2563eb] underline ml-2"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Live
-              </a>
+          </div>
+          <div className="text-sm text-[#374151] mt-1">
+            {typeof proj.description === "string" ? (
+              proj.description
+            ) : (
+              <ul className="list-disc ml-5 mt-2 text-sm text-[#374151]">
+                {proj.description.map((d, i) => (
+                  <li key={i}>{d}</li>
+                ))}
+              </ul>
             )}
           </div>
-          <p className="text-sm text-[#374151] mt-1">{proj.description}</p>
           <p className="text-xs italic text-[#6b7280] mt-1">
             Tech: {proj.tech.join(", ")}
           </p>
+          <ProjectsLinks live={proj?.live} code={proj?.code} />
         </div>
       ))}
     </section>

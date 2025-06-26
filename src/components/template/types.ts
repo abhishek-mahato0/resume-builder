@@ -25,6 +25,7 @@ export interface Contact {
 
 export interface Experience {
   company: string;
+  location?: string;
   role: string;
   startDate: string;
   endDate: string;
@@ -42,18 +43,18 @@ export type Level = 1 | 2 | 3 | 4 | 4;
 export interface Skills {
   name: string;
   level: Level;
-  subtitle: string;
+  subtitle?: string;
 }
 
 export interface Project {
   name: string;
-  description: string;
+  description: string | string[];
   tech: string[];
   live?: string;
   code?: string;
 }
 
-export type TemplateType = "classic" | "modern" | "tailored";
+export type TemplateType = "classic" | "modern" | "tailored" | "colored";
 
 export type TemplateProps = {
   id: number;

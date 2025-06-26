@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ResumeData } from "../template/types";
+import { ResumeData, TemplateType } from "../template/types";
 import { RiPrinterLine } from "react-icons/ri";
 import { saveTemplate } from "../auth/utils";
 import { toast } from "sonner";
@@ -17,7 +17,7 @@ const Sidebar = ({
   const [jsonText, setJsonText] = useState(""); // editable text
   const [parsedJson, setParsedJson] = useState<ResumeData | null>(null);
   const searchParams = useSearchParams();
-  const template = (searchParams.get("template") as string) || "classic";
+  const template = (searchParams.get("template") as TemplateType) || "classic";
   const [isValid, setIsValid] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -64,7 +64,8 @@ const Sidebar = ({
     }
     const isDownloaded = await downloadPDF(
       "classic-resume",
-      parsedJson.title || "My Resume"
+      parsedJson.title || "My Resume",
+      template
     );
 
     if (isDownloaded) {

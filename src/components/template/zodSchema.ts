@@ -6,7 +6,7 @@ const SkillSchema = z.union([
   z.object({
     name: z.string(),
     level: z.number().min(1).max(4),
-    subtitle: z.string(),
+    subtitle: z.string().optional(),
   }),
 ]);
 

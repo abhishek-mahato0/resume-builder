@@ -27,6 +27,7 @@ import {
   TailoredSkills,
   TailoredSummary,
 } from "./tailored";
+import { ColoredEducation, ColoredExperience, ColoredHeader, ColoredProjects, ColoredSkills } from "./coloured";
 
 export const getSectionComponents = (
   template: TemplateType,
@@ -78,6 +79,17 @@ export const getSectionComponents = (
         : null),
       projects: <TailoredProjects projects={data.projects || []} />,
     },
+    colored: {
+      header: <ColoredHeader data={data} />,
+      summary:null,
+      skills: <ColoredSkills skills={data.skills || []} title="Skills" />,
+      experience: <ColoredExperience experience={data.experience} />,
+      ...(data.language && data.language.length > 0
+        ? { language: <ColoredSkills skills={data.language || []} title="Language" /> }
+        : {}),
+      education: <ColoredEducation education={data.education} />,  
+      projects: <ColoredProjects projects={data.projects || []} />
+    }
   };
 
   return components[template];
@@ -88,7 +100,7 @@ export const getSections = (template: TemplateType, data: ResumeData) => {
 
   return [
     { id: "header", component: componentMap.header },
-    { id: "summary", component: componentMap.summary },
+    ...(componentMap.summary ? [{ id: "summary", component: componentMap.summary }]: []),
     { id: "experience", component: componentMap.experience },
     { id: "skills", component: componentMap.skills },
     ...(componentMap?.language
@@ -98,6 +110,17 @@ export const getSections = (template: TemplateType, data: ResumeData) => {
     { id: "projects", component: componentMap.projects },
   ];
 };
+
+const TemplateBGColors: Record<TemplateType, string> = {
+  classic: "#ffffff",
+  modern: "#f3f4f6",
+  tailored: "#f9fafb",
+  colored: "#f3f4f6",
+};
+
+export const getBackgroundColor = (template: TemplateType) => {
+  return TemplateBGColors[template] || TemplateBGColors.classic;
+}
 
 export const contactInfo = [
   {

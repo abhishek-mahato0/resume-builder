@@ -2,6 +2,8 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import html2pdf from "html2pdf.js";
+import { getBackgroundColor } from "@/components/template/utils";
+import { TemplateType } from "@/components/template/types";
 
 export const getTitle = (key: string) => {
   const texts = key.split("-");
@@ -33,11 +35,13 @@ export const getInitials = (name: string) => {
 
 export const downloadPDF = async (
   elementId: string,
-  fileName = "resume.pdf"
+  fileName = "resume.pdf",
+  template: TemplateType = "classic"
 ) => {
   try {
     const element = document.getElementById(elementId);
     if (!element) return;
+    element.style.backgroundColor = getBackgroundColor(template);
     await new Promise((resolve) => setTimeout(resolve, 100));
 
     const opt = {

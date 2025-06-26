@@ -16,6 +16,7 @@ export const sampleData: ResumeData = {
   experience: [
     {
       company: "ABC Intern",
+      location: "Kathmandu, Nepal",
       role: "React Developer",
       startDate: "Jan 2023",
       endDate: "Oct 2023",
@@ -28,6 +29,7 @@ export const sampleData: ResumeData = {
     {
       company: "XYZ Solutions",
       role: "Full Stack Developer",
+      location: "Kathmandu, Nepal",
       startDate: "Nov 2023",
       endDate: "Present",
       description: [
@@ -39,6 +41,7 @@ export const sampleData: ResumeData = {
     {
       company: "Tech Innovators",
       role: "Frontend Developer",
+      location: "Kathmandu, Nepal",
       startDate: "Jan 2022",
       endDate: "Dec 2022",
       description: [
@@ -58,15 +61,38 @@ export const sampleData: ResumeData = {
     },
   ],
   skills: [
-    "React - Expert",
-    "TypeScript - Proficient",
-    "Node.js - Proficient",
-    "MongoDB",
-    "Redux",
-    "Framer Motion",
-    "React Query",
-    "Tailwind CSS",
-    "OpenAI API",
+   {
+    name: "JavaScript",
+    level: 4,
+   },
+    {
+      name: "React",
+      level: 4,
+    },
+    {
+      name: "Node.js",
+      level: 3,
+    },
+    {
+      name: "TypeScript",
+      level: 3,
+    },
+    {
+      name: "Redux",
+      level: 3,
+    },
+    {
+      name: "Tailwind CSS",
+      level: 4,
+    },
+    {
+      name: "MapLibre/OpenLayers",
+      level: 3,
+    },
+    {
+      name: "OpenAI API",
+      level: 2,
+    },
   ],
   language: ["English - Proficient", "Nepali - Expert", "Hindi - Proficient"],
   projects: [
@@ -107,5 +133,11 @@ export const templates: TemplateProps[] = [
     title: "Tailored Modern",
     preview: "/template/tailored.png",
     value: "tailored",
+  },
+  {
+    id: 4,
+    title: "Colored Resume",
+    preview: "/templates/colored.png",
+    value: "colored",
   },
 ];
