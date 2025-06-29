@@ -1,4 +1,5 @@
-import { auth } from "@/auth";
+"use client";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 type ResumeButtonProps = {
@@ -8,12 +9,12 @@ type ResumeButtonProps = {
   size?: "sm" | "lg";
 };
 
-export default async function CreateMyResumeButton({
+export default function CreateMyResumeButton({
   text = "Create My Resume",
   variant = "light",
   size = "sm",
 }: ResumeButtonProps) {
-  const session = await auth();
+  const { data: session } = useSession();
   const className = `
     flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full
     ${size === "lg" ? "h-12 px-5 text-base" : "h-10 px-4 text-sm"}

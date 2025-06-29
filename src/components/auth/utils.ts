@@ -55,9 +55,6 @@ export const handleLogin = async (email: string) => {
       throw new Error("User not found");
     }
 
-    // Here you would typically verify the password
-    // For simplicity, we assume the password is correct
-
     return user;
   } catch (err) {
     console.error("Error logging in user:", err);
@@ -69,18 +66,29 @@ export const getUser = async () => {
   try {
     const session = await auth();
     if (!session?.user?.email) {
-      throw new Error("User not authenticated");
+      return {
+        error: "User not authenticated",
+        user: null,
+      };
     }
     const user = await prisma.user.findUnique({
       where: { email: session.user.email },
     });
     if (!user) {
-      throw new Error("User not found");
+      return {
+        error: "User not found",
+        user: null,
+      };
     }
-    return user;
-  } catch (err) {
-    console.error("Error fetching user:", err);
-    throw err;
+    return {
+      user: user,
+      error: null,
+    };
+  } catch {
+    return {
+      error: "Failed to fetch user",
+      user: null,
+    };
   }
 };
 
@@ -115,27 +123,34 @@ export async function SignIn(url: string) {
 }
 
 export async function getContact() {
-  const user = await getUser();
+  try {
+    const { user } = await getUser();
 
-  if (!user) {
+    if (!user) {
+      return {
+        name: "",
+        email: "",
+      };
+    }
+
+    const contact = await prisma.contact.findFirst({
+      where: { userId: user.id },
+    });
+
+    if (!contact) {
+      return {
+        name: user.name || "",
+        email: user.email || "",
+      };
+    }
+
+    return contact;
+  } catch {
     return {
       name: "",
       email: "",
     };
   }
-
-  const contact = await prisma.contact.findFirst({
-    where: { userId: user.id },
-  });
-
-  if (!contact) {
-    return {
-      name: user.name || "",
-      email: user.email || "",
-    };
-  }
-
-  return contact;
 }
 
 export async function saveSettings(formData: FormData) {
@@ -152,7 +167,7 @@ export async function saveSettings(formData: FormData) {
     };
   }
 
-  const user = await getUser();
+  const { user } = await getUser();
   if (!user) {
     return {
       error: "User not authenticated",
@@ -209,7 +224,7 @@ export async function saveSettings(formData: FormData) {
 
 export async function getRecentTemplate() {
   try {
-    const user = await getUser();
+    const { user } = await getUser();
     if (!user) {
       return {
         error: "User not authenticated",
@@ -232,7 +247,7 @@ export async function getRecentTemplate() {
 
 export async function saveTemplate(data: ResumeData) {
   try {
-    const user = await getUser();
+    const { user } = await getUser();
     if (!user) {
       return {
         error: "User not authenticated",
@@ -258,6 +273,64 @@ export async function saveTemplate(data: ResumeData) {
   } catch (error) {
     return {
       error: error || "Failed to save template.",
+    };
+  }
+}
+
+export async function getAllTemplates() {
+  try {
+    const { user } = await getUser();
+    if (!user) {
+      return {
+        error: "User not authenticated",
+        templates: null,
+      };
+    }
+
+    const template = await prisma.userInfo.findMany({
+      where: { userId: user.id },
+      orderBy: { updatedAt: "desc" },
+    });
+
+    if (!template || template.length === 0) {
+      return {
+        templates: null,
+        error: "No templates found.",
+      };
+    }
+
+    return {
+      templates: template,
+      error: null,
+    };
+  } catch (error) {
+    return {
+      templates: null,
+      error: error || "Failed to fetch recent template.",
+    };
+  }
+}
+
+export async function deleteTemplate(id: string) {
+  try {
+    const { user } = await getUser();
+    if (!user) {
+      return {
+        error: "User not authenticated",
+      };
+    }
+
+    const deletedTemplate = await prisma.userInfo.delete({
+      where: { id: id },
+    });
+    return {
+      error: null,
+      template: deletedTemplate,
+    };
+  } catch (error) {
+    return {
+      error: error || "Failed to delete template.",
+      template: null,
     };
   }
 }

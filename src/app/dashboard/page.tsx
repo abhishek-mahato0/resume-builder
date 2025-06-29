@@ -1,34 +1,22 @@
 // app/dashboard/page.tsx or your dashboard route
 
+import { getAllTemplates } from "@/components/auth/utils";
 import Template from "@/components/Home/Template";
 import DashboardLayout from "@/components/Layout/Dashboard";
-
-const recentBuilds = [
-  { id: 101, title: "Frontend Resume", updated: "2025-06-15" },
-  { id: 102, title: "Backend Resume", updated: "2025-06-10" },
-];
+import RecentTable from "@/components/molecules/Dashboard/RecentTable";
 
 export default async function Dashboard() {
+  const { templates } = await getAllTemplates();
   return (
-    <div className="min-h-screen flex w-full text-white">
+    <div className="min-h-screen flex w-full text-white bg-[#14191f]">
       <DashboardLayout>
-        <main className="px-6 py-8 space-y-12">
+        <main className="px-6 space-y-1">
           <Template />
-          <section>
-            <h2 className="text-xl font-semibold mb-4">📁 Recent Builds</h2>
-            <div className="space-y-3">
-              {recentBuilds.map((resume) => (
-                <div
-                  key={resume.id}
-                  className="bg-[#2e2f31] border border-[#3d3d3f] p-4 rounded-md hover:bg-[#38393c] transition cursor-pointer"
-                >
-                  <h3 className="text-lg">{resume.title}</h3>
-                  <p className="text-sm text-gray-400">
-                    Last updated: {resume.updated}
-                  </p>
-                </div>
-              ))}
-            </div>
+          <section className="pt-5">
+            <h2 className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3">
+              Recent
+            </h2>
+            <RecentTable templates={templates || []} />
           </section>
         </main>
       </DashboardLayout>

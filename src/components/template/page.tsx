@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ResumeData, TemplateType } from "./types";
 import { useSearchParams } from "next/navigation";
-import { getBackgroundColor, getSections } from "./utils";
+import { getSections } from "./utils";
 
 const TemplateLayout = ({ data }: { data: ResumeData }) => {
   const sectionRefs = useRef<any>({});
@@ -34,10 +34,9 @@ const TemplateLayout = ({ data }: { data: ResumeData }) => {
     setPageBreaks(breakPoints); // store the points where a new page should start
   }, []);
 
-
   return (
     <div
-      className={`w-[794px] mx-auto bg-[${getBackgroundColor(template)}] text-[#201f1f] font-serif p-8 shadow-lg space-y-6`}
+      className={`w-[794px] mx-auto bg-[#ffffff] text-[#201f1f] font-serif p-8 shadow-lg space-y-6`}
       id="classic-resume"
     >
       {getSections(template, data).map((section) => {

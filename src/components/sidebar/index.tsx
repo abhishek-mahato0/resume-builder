@@ -64,8 +64,7 @@ const Sidebar = ({
     }
     const isDownloaded = await downloadPDF(
       "classic-resume",
-      parsedJson.title || "My Resume",
-      template
+      parsedJson.title || "My Resume"
     );
 
     if (isDownloaded) {

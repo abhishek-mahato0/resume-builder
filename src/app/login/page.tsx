@@ -8,6 +8,11 @@ import { FaGoogle } from "react-icons/fa";
 
 export default function Page() {
   const searchParams = useSearchParams();
+  const handleSignIn = async () => {
+    await signIn("google", {
+      callbackUrl: searchParams.get("callbackUrl") || "/dashboard",
+    });
+  };
   return (
     <div className="relative flex size-full min-h-screen flex-col bg-[#14191f] dark group/design-root overflow-x-hidden">
       <Navbar />
@@ -58,11 +63,7 @@ export default function Page() {
             <button
               type="button"
               className="w-[90%] cursor-pointer flex items-center justify-center gap-3 bg-white text-black font-medium py-2 rounded-md shadow hover:bg-gray-100 transition"
-              onClick={async () =>
-                await signIn("google", {
-                  callbackUrl: `${searchParams.get("callbackUrl")}`,
-                })
-              }
+              onClick={() => handleSignIn()}
             >
               <FaGoogle className="text-xl" />
               Sign in with Google

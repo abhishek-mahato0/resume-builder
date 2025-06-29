@@ -48,12 +48,12 @@ export default function SideNav() {
 
   return (
     <div
-      className={`transition-all duration-300 ease-in-out h-screen text-white lg:flex hidden flex-col relative ${
-        isCollapsed ? "w-12 bg-transparent" : "w-[20%] bg-black"
+      className={`transition-all duration-300 ease-in-out h-screen text-white lg:flex hidden flex-col relative py-6 ${
+        isCollapsed ? "w-12 bg-transparent" : "w-[20%] bg-[#14191f]"
       }`}
     >
-      <div className="flex items-center justify-between px-4 py-3">
-        {!isCollapsed && <h1 className="text-2xl font-bold"> Resume.io</h1>}
+      <div className="flex items-center justify-between px-4 pb-4">
+        {!isCollapsed && <h1 className="text-xl font-bold">Resume.io</h1>}
         <div
           className="text-gray-400 text-2xl cursor-pointer ml-auto"
           onClick={() => setisCollapsed((prev) => !prev)}

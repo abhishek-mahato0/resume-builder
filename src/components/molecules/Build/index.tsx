@@ -5,7 +5,8 @@ import SideNav from "@/components/sidenav";
 import { sampleData } from "@/components/template/data";
 import TemplateLayout from "@/components/template/page";
 import { ResumeData, UserContact } from "@/components/template/types";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
+import LoadingSkeleton from "./Loading";
 
 const Build = ({
   template,
@@ -47,17 +48,19 @@ const Build = ({
   return (
     <div className="flex w-full h-screen overflow-hidden">
       <SideNav />
-      <div
-        className={`transition-all duration-300 ease-in-out flex-1 w-auto overflow-y-scroll`}
-      >
-        {resumeData ? (
-          <TemplateLayout data={resumeData} />
-        ) : (
-          <div className="h-full bg-gray-800 flex items-center justify-center text-white">
-            No data yet.
-          </div>
-        )}
-      </div>
+      <Suspense fallback={<LoadingSkeleton />}>
+        <div
+          className={`transition-all duration-300 ease-in-out flex-1 w-auto overflow-y-scroll`}
+        >
+          {resumeData ? (
+            <TemplateLayout data={resumeData} />
+          ) : (
+            <div className="h-full bg-gray-800 flex items-center justify-center text-white">
+              No data yet.
+            </div>
+          )}
+        </div>
+      </Suspense>
       <Sidebar
         sampleData={initialData || sampleData}
         onDataChange={setResumeData}
