@@ -13,38 +13,49 @@ import { getInitials } from "@/lib/utils";
 import { IoMdLogOut } from "react-icons/io";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { templates } from "../template/data";
+import { ResumeData } from "../template/types";
+import AccordionData from "./AccordionData";
 
-const sideBarData = [
-  {
-    id: 1,
-    name: "Dashboard",
-    icon: <TiHomeOutline />,
-    link: "/dashboard",
-  },
-  {
-    id: 2,
-    name: "My Resumes",
-    icon: <FaRegFile />,
-    link: "/my-resumes",
-  },
-  {
-    id: 3,
-    name: "Templates",
-    icon: <FaListUl />,
-    link: "/templates",
-  },
-  {
-    id: 4,
-    name: "Settings",
-    icon: <CiSettings className="text-2xl" />,
-    link: "/settings",
-  },
-];
-
-export default function SideNav() {
+export default function SideNav({
+  hasOptions = false,
+  recentResume,
+}: {
+  hasOptions?: boolean;
+  recentResume?: ResumeData[] | null;
+}) {
   const { data: session } = useSession();
   const [isCollapsed, setisCollapsed] = useState(false);
   const pathname = usePathname();
+
+  const sideBarData = [
+    {
+      id: 1,
+      name: "Dashboard",
+      icon: <TiHomeOutline />,
+      link: "/dashboard",
+    },
+    {
+      id: 2,
+      name: "My Resumes",
+      icon: <FaRegFile />,
+      link: "/my-resumes",
+      options: recentResume || [],
+    },
+    {
+      id: 3,
+      name: "Templates",
+      icon: <FaListUl />,
+      link: "/templates",
+      options: templates,
+    },
+    {
+      id: 4,
+      name: "Settings",
+      icon: <CiSettings className="text-2xl" />,
+      link: "/settings",
+    },
+  ];
 
   return (
     <div
@@ -70,22 +81,26 @@ export default function SideNav() {
           <div className="flex h-[100vh] flex-col justify-between p-4">
             <div className="flex h-full flex-col gap-4">
               <div className="flex h-[80%] flex-col gap-4 overflow-y-auto">
-                {sideBarData.map((item) => (
-                  <Link
-                    href={item.link}
-                    className={`flex items-center gap-3 px-3 py-2 rounded-full hover:bg-[#1f262d] transition ${
-                      pathname === item.link
-                        ? "bg-[#1b232b] text-white"
-                        : "text-gray-400"
-                    }`}
-                    key={item.id}
-                  >
-                    {item.icon && item.icon}
-                    <p className="text-white text-sm font-medium leading-normal">
-                      {item.name}
-                    </p>
-                  </Link>
-                ))}
+                {sideBarData.map((item) =>
+                  hasOptions ? (
+                    <AccordionData key={item.id} item={item} />
+                  ) : (
+                    <Link
+                      href={item.link}
+                      className={`flex items-center gap-3 px-3 py-2 rounded-full hover:bg-[#1f262d] transition ${
+                        pathname === item.link
+                          ? "bg-[#1b232b] text-white"
+                          : "text-gray-400"
+                      }`}
+                      key={item.id}
+                    >
+                      {item.icon && item.icon}
+                      <p className="text-white text-sm font-medium leading-normal">
+                        {item.name}
+                      </p>
+                    </Link>
+                  )
+                )}
               </div>
               <div className="flex w-full items-center justify-between absolute bottom-0 left-0 right-0 px-3 py-2">
                 {session?.user?.image ? (
