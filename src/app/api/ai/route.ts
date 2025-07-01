@@ -132,14 +132,10 @@ const ai = new GoogleGenAI({
   apiKey: process.env.GENINI_SECRET,
 });
 
-export async function GET(req: Request) {
-  const url = new URL(req.url);
-  const userInput =
-    url.searchParams.get("input") ||
-    "Generate resume data for a web developer skilled in React.js";
-  const context = url.searchParams.get("context") || "";
-
-  const prompt = `
+export async function POST(req: Request) {
+  try {
+    const { userInput, context } = await req.json();
+    const prompt = `
   You are a resume expert. Given the user's goal and context, generate JSON data for a resume.
 
   User Input: ${userInput}
@@ -148,18 +144,17 @@ export async function GET(req: Request) {
   Respond strictly in valid JSON format according to the given schema. Don't include extra text.
 `;
 
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
-    contents: prompt,
-    config: {
-      responseMimeType: "application/json",
-      responseSchema,
-    },
-  });
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+      config: {
+        responseMimeType: "application/json",
+        responseSchema,
+      },
+    });
 
-  const text = response.text || "";
+    const text = response.text || "";
 
-  try {
     const data = JSON.parse(text || "[]");
     return new Response(JSON.stringify(data), {
       headers: { "Content-Type": "application/json" },
@@ -167,7 +162,7 @@ export async function GET(req: Request) {
     });
   } catch {
     return new Response(
-      JSON.stringify({ error: "Failed to parse JSON response", raw: text }),
+      JSON.stringify({ error: "Failed to parse JSON response" }),
       {
         status: 500,
         headers: { "Content-Type": "application/json" },

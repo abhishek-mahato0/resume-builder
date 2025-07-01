@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   TbLayoutSidebarLeftCollapseFilled,
   TbLayoutSidebarLeftExpandFilled,
@@ -12,10 +13,18 @@ import { signOut, useSession } from "next-auth/react";
 import { getInitials } from "@/lib/utils";
 import { IoMdLogOut } from "react-icons/io";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { templates } from "../template/data";
 import { ResumeData } from "../template/types";
 import AccordionData from "./AccordionData";
+
+type OptionItem = {
+  id: number;
+  name: string;
+  link: string;
+  icon: React.ReactNode;
+  options?: Record<string, any>[]; // Assuming options are of type ResumeData
+};
 
 export default function SideNav({
   hasOptions = false,
@@ -27,8 +36,35 @@ export default function SideNav({
   const { data: session } = useSession();
   const [isCollapsed, setisCollapsed] = useState(false);
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-  const sideBarData = [
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+
+      return params.toString();
+    },
+    [searchParams]
+  );
+
+  const renderOptions = (item: OptionItem) => (
+    <Link
+      href={item.link}
+      className={`flex items-center gap-3 px-3 py-2 rounded-full hover:bg-[#1f262d] transition ${
+        pathname === item.link ? "bg-[#1b232b] text-white" : "text-gray-400"
+      }`}
+      key={item.id}
+    >
+      {item.icon && item.icon}
+      <p className="text-white text-sm font-medium leading-normal">
+        {item.name}
+      </p>
+    </Link>
+  );
+
+  const sideBarData: OptionItem[] = [
     {
       id: 1,
       name: "Dashboard",
@@ -40,14 +76,30 @@ export default function SideNav({
       name: "My Resumes",
       icon: <FaRegFile />,
       link: "/my-resumes",
-      options: recentResume || [],
+      options: recentResume || [
+        {
+          id: 1,
+          name: "No recent resumes found",
+          link: "/my-resumes",
+          icon: <FaRegFile />,
+        },
+      ],
     },
     {
       id: 3,
       name: "Templates",
       icon: <FaListUl />,
       link: "/templates",
-      options: templates,
+      options: templates.map((template) => ({
+        id: template.id,
+        name: template.title,
+        link: `/templates/${template.id}`,
+        isActive: searchParams.get("template") === template.value,
+        onClick: () =>
+          router.push(
+            pathname + "?" + createQueryString("template", template.value)
+          ),
+      })),
     },
     {
       id: 4,
@@ -78,27 +130,14 @@ export default function SideNav({
       </div>
       {!isCollapsed && (
         <div className="flex flex-col w-full">
-          <div className="flex h-[100vh] flex-col justify-between p-4">
-            <div className="flex h-full flex-col gap-4">
+          <div className="flex h-[calc(100vh-60px)] flex-col justify-between p-4">
+            <div className="flex h-full flex-col gap-4 relative">
               <div className="flex h-[80%] flex-col gap-4 overflow-y-auto">
                 {sideBarData.map((item) =>
-                  hasOptions ? (
+                  hasOptions && item.options ? (
                     <AccordionData key={item.id} item={item} />
                   ) : (
-                    <Link
-                      href={item.link}
-                      className={`flex items-center gap-3 px-3 py-2 rounded-full hover:bg-[#1f262d] transition ${
-                        pathname === item.link
-                          ? "bg-[#1b232b] text-white"
-                          : "text-gray-400"
-                      }`}
-                      key={item.id}
-                    >
-                      {item.icon && item.icon}
-                      <p className="text-white text-sm font-medium leading-normal">
-                        {item.name}
-                      </p>
-                    </Link>
+                    renderOptions(item)
                   )
                 )}
               </div>

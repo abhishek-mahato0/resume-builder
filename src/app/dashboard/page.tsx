@@ -8,7 +8,7 @@ import RecentTable from "@/components/molecules/Dashboard/RecentTable";
 export default async function Dashboard() {
   const { templates } = await getAllTemplates();
   return (
-    <div className="min-h-screen flex w-full text-white bg-[#14191f]">
+    <div className="flex w-full text-white bg-[#14191f] h-screen">
       <DashboardLayout>
         <main className="px-6 space-y-1">
           <Template />

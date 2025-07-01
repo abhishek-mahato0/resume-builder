@@ -46,11 +46,11 @@ const Build = ({
   }, [template, contact]);
 
   return (
-    <div className="flex w-full h-screen overflow-hidden">
-      <SideNav />
+    <div className="flex w-full h-screen lg:flex-row flex-col-reverse lg:overflow-hidden overflow-y-auto">
+      <SideNav hasOptions={true} />
       <Suspense fallback={<LoadingSkeleton />}>
         <div
-          className={`transition-all duration-300 ease-in-out flex-1 w-auto overflow-y-scroll`}
+          className={`transition-all duration-300 ease-in-out flex-1 lg:w-auto w-full overflow-y-scroll`}
         >
           {resumeData ? (
             <TemplateLayout data={resumeData} />
@@ -62,8 +62,8 @@ const Build = ({
         </div>
       </Suspense>
       <Sidebar
-        sampleData={initialData || sampleData}
-        onDataChange={setResumeData}
+        sampleData={resumeData || initialData || sampleData}
+        onDataChange={(data)=>setResumeData(data)}
       />
     </div>
   );

@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { useSearchParams } from "next/navigation";
 import { validateResume } from "../template/zodSchema";
 import { downloadPDF } from "@/lib/utils";
+import { IoMdSend } from "react-icons/io";
 
 const Sidebar = ({
   sampleData,
@@ -20,6 +21,16 @@ const Sidebar = ({
   const template = (searchParams.get("template") as TemplateType) || "classic";
   const [isValid, setIsValid] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [userInput, setUserInput] = useState<string>("");
+  const [isAIOpertations, setIsAIOpertations] = useState<{
+    isLoading: boolean;
+    error: string | null;
+    data: null;
+  }>({
+    isLoading: false,
+    error: null,
+    data: null,
+  });
 
   useEffect(() => {
     const prettyJson = JSON.stringify(sampleData, null, 2);
@@ -89,6 +100,46 @@ const Sidebar = ({
     }
   };
 
+  const handleAIRequest = async (query: string) => {
+    setIsAIOpertations((prev) => ({
+      ...prev,
+      isLoading: true,
+    }));
+    try {
+      const res = fetch("/api/ai", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userInput: query,
+          context: JSON.stringify(parsedJson),
+        }),
+      });
+      const data = await (await res).json();
+      if (data?.length) {
+        setParsedJson(data?.[0]);
+        setJsonText(JSON.stringify(data?.[0], null, 2));
+        setIsAIOpertations((prev) => ({
+          ...prev,
+          isLoading: false,
+          data: data,
+          error: null,
+        }));
+      }
+    } catch (error) {
+      setIsAIOpertations((prev) => ({
+        ...prev,
+        isLoading: false,
+        error: error instanceof Error ? error.message : "Unknown error",
+      }));
+      toast.error(
+        "❌ AI request failed: " +
+          (error instanceof Error ? error.message : "Unknown error")
+      );
+    }
+  };
+
   return (
     <div className="flex flex-col w-[30%] bg-black text-white h-[100vh] gap-4 py-6 pr-4 pl-8">
       {/* Title and Description */}
@@ -119,23 +170,37 @@ const Sidebar = ({
       </div>
 
       {/* JSON Editor */}
-      <div className="flex-1 bg-gray-100 text-black border border-gray-300 rounded">
-        <textarea
-          value={jsonText}
-          onChange={(e) => handleRawJsonChange(e.target.value)}
-          className="h-full w-full font-mono p-2 text-sm outline-none"
-        />
+      <div className="flex-1 bg-gray-100 text-black border h-[65%] border-gray-300 rounded overflow-hidden">
+        {isAIOpertations.isLoading ? (
+          <div className="animate-pulse bg-gray-400 bg-opacity-50 flex h-full items-center justify-center z-10">
+            <p className="text-gray-800">Loading AI response...</p>
+          </div>
+        ) : (
+          <textarea
+            value={jsonText}
+            onChange={(e) => handleRawJsonChange(e.target.value)}
+            className="w-full h-full font-mono p-2 text-sm outline-none resize-none overflow-y-auto"
+          />
+        )}
       </div>
 
       {/* AI Section Placeholder */}
       <div className="flex gap-4 items-center bg-gray-900 border border-gray-600 p-2 rounded">
-        <input
-          type="text"
+        <textarea
           placeholder="Ask AI (coming soon)"
-          className="flex-1 bg-transparent text-white placeholder-gray-400 outline-none"
-          disabled
+          className="flex-1 bg-transparent text-white placeholder-gray-400 resize-none outline-none overflow-y-clip"
+          disabled={isAIOpertations.isLoading}
+          onChange={(e) => setUserInput(e.target.value)}
+          value={userInput}
         />
-        <p className="text-gray-500 cursor-not-allowed">Send</p>
+        <p
+          className={`text-white text-2xl cursor-pointer ${
+            isAIOpertations.isLoading ? "cursor-not-allowed" : ""
+          }`}
+          onClick={() => handleAIRequest(userInput)}
+        >
+          <IoMdSend />
+        </p>
       </div>
 
       {!isValid && (

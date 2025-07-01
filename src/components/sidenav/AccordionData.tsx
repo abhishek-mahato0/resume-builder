@@ -7,17 +7,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../ui/Accrodion";
-import { usePathname } from "next/navigation";
+import { usePathname} from "next/navigation";
 
 const AccordionData = ({ item }: { item: any }) => {
   const pathname = usePathname();
   return (
-    <div>
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
-          <AccordionTrigger>
+          <AccordionTrigger className="px-3 py-2 rounded-full hover:bg-[#1f262d] ">
             <div
-              className={`flex items-center gap-3 px-3 py-2 rounded-full hover:bg-[#1f262d] transition ${
+              className={`flex items-center gap-3 transition ${
                 pathname === item.link
                   ? "bg-[#1b232b] text-white"
                   : "text-gray-400"
@@ -36,11 +35,12 @@ const AccordionData = ({ item }: { item: any }) => {
                 {item.options.map((option: any) => (
                   <li
                     key={option.id}
-                    className={`py-2 ${
+                    onClick={()=> option.onClick && option.onClick()}
+                    className={`py-2 px-4 cursor-pointer ${
                       pathname === option.link ? "text-white" : "text-gray-400"
-                    }`}
+                    } ${option.isActive ? "bg-[#1b232b] text-whit rounded-full" : ""}`}
                   >
-                    <a href={option.link}>{option.name}</a>
+                  {option.name}
                   </li>
                 ))}
               </ul>
@@ -50,7 +50,6 @@ const AccordionData = ({ item }: { item: any }) => {
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-    </div>
   );
 };
 
