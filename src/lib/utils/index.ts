@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import html2pdf from "html2pdf.js";
 
 export const getTitle = (key: string) => {
   const texts = key.split("-");
@@ -29,38 +28,4 @@ export const getInitials = (name: string) => {
   if (!name) return "";
   const names = name?.split(" ");
   return `${names?.[0]?.[0]}${names?.[1]?.[0]}`;
-};
-
-export const downloadPDF = async (
-  elementId: string,
-  fileName = "resume.pdf"
-) => {
-  try {
-    const element = document.getElementById(elementId);
-    if (!element) return;
-    await new Promise((resolve) => setTimeout(resolve, 100));
-
-    const opt = {
-      margin: [0.5, 0.5],
-      filename: fileName,
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: {
-        scale: 2,
-        logging: false,
-        useCORS: true,
-        allowTaint: true,
-      },
-      jsPDF: {
-        unit: "pt",
-        format: "a4",
-        orientation: "portrait",
-      },
-    };
-
-    await html2pdf().from(element).set(opt).save();
-    return true;
-  } catch (error) {
-    console.error("Error downloading PDF:", error);
-    return false;
-  }
 };

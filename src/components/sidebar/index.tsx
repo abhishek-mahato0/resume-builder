@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import { ResumeData, TemplateType } from "../template/types";
 import { RiPrinterLine } from "react-icons/ri";
@@ -5,7 +6,7 @@ import { saveTemplate } from "../auth/utils";
 import { toast } from "sonner";
 import { useSearchParams } from "next/navigation";
 import { validateResume } from "../template/zodSchema";
-import { downloadPDF } from "@/lib/utils";
+import html2pdf from "html2pdf.js";
 import { IoMdSend } from "react-icons/io";
 
 const Sidebar = ({
@@ -19,9 +20,9 @@ const Sidebar = ({
   const [parsedJson, setParsedJson] = useState<ResumeData | null>(null);
   const searchParams = useSearchParams();
   const template = (searchParams.get("template") as TemplateType) || "classic";
+  const [userInput, setUserInput] = useState("");
   const [isValid, setIsValid] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [userInput, setUserInput] = useState<string>("");
   const [isAIOpertations, setIsAIOpertations] = useState<{
     isLoading: boolean;
     error: string | null;
@@ -31,6 +32,37 @@ const Sidebar = ({
     error: null,
     data: null,
   });
+
+  const downloadPDF = async (elementId: string, fileName = "resume.pdf") => {
+    try {
+      const element = document.getElementById(elementId);
+      if (!element) return;
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      const opt = {
+        margin: [0.5, 0.5],
+        filename: fileName,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: {
+          scale: 2,
+          logging: false,
+          useCORS: true,
+          allowTaint: true,
+        },
+        jsPDF: {
+          unit: "pt",
+          format: "a4",
+          orientation: "portrait",
+        },
+      };
+
+      await html2pdf().from(element).set(opt).save();
+      return true;
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+      return false;
+    }
+  };
 
   useEffect(() => {
     const prettyJson = JSON.stringify(sampleData, null, 2);

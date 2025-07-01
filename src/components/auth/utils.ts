@@ -3,6 +3,7 @@ import { auth, signIn } from "@/auth";
 import { prisma } from "@/auth/db";
 import { revalidatePath } from "next/cache";
 import { ResumeData } from "../template/types";
+import { redirect } from "next/navigation";
 
 export const handleAuth = async (
   e: React.FormEvent<HTMLFormElement>,
@@ -226,9 +227,7 @@ export async function getRecentTemplate() {
   try {
     const { user } = await getUser();
     if (!user) {
-      return {
-        error: "User not authenticated",
-      };
+      redirect("/login");
     }
 
     const template = await prisma.userInfo.findFirst({
@@ -245,13 +244,31 @@ export async function getRecentTemplate() {
   }
 }
 
-export async function saveTemplate(data: ResumeData) {
+export async function getRecentTemplateById(id: string) {
   try {
     const { user } = await getUser();
     if (!user) {
       return {
         error: "User not authenticated",
       };
+    }
+
+    const template = await prisma.userInfo.findUnique({
+      where: { id: id },
+    });
+
+    return template;
+  } catch (error) {
+    return {
+      error: error || "Failed to fetch recent template.",
+    };
+  }
+}
+export async function saveTemplate(data: ResumeData) {
+  try {
+    const { user } = await getUser();
+    if (!user) {
+      redirect("/login");
     }
     const newTemplate = await prisma.userInfo.create({
       data: {

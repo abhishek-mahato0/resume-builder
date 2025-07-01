@@ -10,10 +10,9 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 const getTemplateName = (templateId: string) => {
-  console.log("getTemplateName called with templateId:", templateId, templates);
   return (
-    templates.find((template) => String(template.id) === templateId)?.title ||
-    "Unknown Template"
+    templates.find((template) => String(template.value) === templateId)
+      ?.title || "Unknown Template"
   );
 };
 

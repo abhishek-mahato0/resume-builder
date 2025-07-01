@@ -43,8 +43,11 @@ export const ClassicExperienceSection: FC<{ experience: Experience[] }> = ({
 }) => (
   <section>
     <Title title="Work Experience" />
-    {experience.map((exp, idx) => (
-      <div key={idx} className="mb-4">
+    {experience?.map((exp) => (
+      <div
+        key={`${exp.startDate.toString()}${exp.endDate.toString()}`}
+        className="mb-4"
+      >
         <div className="flex justify-between text-sm font-medium text-[#171717]">
           <span>
             {exp.role} @ {exp.company}
@@ -68,7 +71,7 @@ export const ClassicEducationSection: FC<{ education: Education[] }> = ({
 }) => (
   <section>
     <Title title="Education" />
-    {education.map((edu, idx) => (
+    {education?.map((edu, idx) => (
       <div
         key={idx}
         className="text-sm mb-2 w-full flex justify-between text-[#374151]"
@@ -91,9 +94,11 @@ export const ClassicSkills: FC<{
   <section>
     <Title title={title} />
     <div className=" flex flex-wrap gap-3 list-disc list-inside py-3 px-4 text-sm text-[#374151]">
-      {skills.map((skill) => (
+      {skills?.map((skill, ind) => (
         <div
-          key={skill.toString()}
+          key={`${
+            typeof skill === "string" ? skill.toString() : skill.name
+          }-${ind}`}
           className="flex gap-1"
           style={{ alignItems: "center" }}
         >

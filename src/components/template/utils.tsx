@@ -43,8 +43,10 @@ export const getSectionComponents = (
     classic: {
       header: <ClassicHeader data={data} />,
       summary: <ClassicSummary summary={data.summary || ""} />,
-      experience: <ClassicExperienceSection experience={data.experience} />,
-      education: <ClassicEducationSection education={data.education} />,
+      experience: (
+        <ClassicExperienceSection experience={data.experience || []} />
+      ),
+      education: <ClassicEducationSection education={data.education || []} />,
       skills: <ClassicSkills skills={data.skills || []} title="Skills" />,
       ...(data.language && data.language.length > 0
         ? {

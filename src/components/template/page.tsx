@@ -42,19 +42,18 @@ const TemplateLayout = ({ data }: { data: ResumeData }) => {
       {getSections(template, data).map((section) => {
         const shouldBreakBefore = pageBreaks?.includes(section.id);
         return (
-          <>
+          <div key={section.id}>
             {shouldBreakBefore ? (
               <div className="html2pdf__page-break"></div>
             ) : null}
             <div
-              key={section.id}
               ref={(el) => {
                 sectionRefs.current[section.id] = el;
               }}
             >
               {section.component}
             </div>
-          </>
+          </div>
         );
       })}
     </div>
