@@ -18,11 +18,11 @@ const Template = () => {
   return (
     <section>
       <div className="flex flex-wrap justify-between gap-3">
-        <p className="text-white tracking-light text-[32px] font-bold leading-tight min-w-72">
+        <p className="text-white tracking-light lg:text-[32px] text-[22px] font-bold leading-tight min-w-72">
           Resume Templates
         </p>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
         {templates.map((template) => (
           <div
             key={template.id}

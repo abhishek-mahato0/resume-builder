@@ -1,15 +1,14 @@
 import { getContact } from "@/components/auth/utils";
+import DashboardLayout from "@/components/Layout/Dashboard";
 import SettingForm from "@/components/molecules/SettingForm";
-import SideNav from "@/components/sidenav";
 
 export default async function Page() {
   const contact = await getContact();
   return (
-    <div className="flex w-full h-screen overflow-hidden bg-[#14191f]">
-      <SideNav />
-      <div className="layout-container flex w-full items-center justify-center flex-col">
+    <div className="bg-[#14191f] w-ull h-full">
+      <DashboardLayout>
         <SettingForm user={contact} />
-      </div>
+      </DashboardLayout>
     </div>
   );
 }

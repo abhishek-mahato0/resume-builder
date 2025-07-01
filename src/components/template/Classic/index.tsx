@@ -10,6 +10,7 @@ import {
 import Title from "@/components/atoms/Title";
 import { GoDotFill } from "react-icons/go";
 import { contactInfo } from "../utils";
+import ProjectsLinks from "../components/ProjectsLinks";
 
 export const ClassicHeader: FC<{ data: ResumeData }> = ({ data }) => (
   <header className="text-center flex flex-col gap-2">
@@ -117,8 +118,7 @@ export const ClassicProjects: FC<{ projects?: Project[] }> = ({ projects }) => {
             <p className="text-xs italic text-[#4B5563]">
               Tech: {proj.tech.join(", ")}
             </p>
-            {proj.live && <p className="text-sm">Live: {proj.live}</p>}
-            {proj.code && <p className="text-sm">Code: {proj.code}</p>}
+            <ProjectsLinks live={proj.live} code={proj.code} />
           </div>
         </div>
       ))}

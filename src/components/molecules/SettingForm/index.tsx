@@ -41,13 +41,13 @@ const SettingForm = ({ user }: { user: UserContact }) => {
       action={handleSubmit}
       className="layout-content-container flex flex-col w-full justify-start items-center py-5 flex-1 h-full"
     >
-      <h2 className="text-white tracking-light text-[28px] font-bold leading-tight px-4 text-center pb-3 pt-5">
+      <h2 className="text-white tracking-light lg:text-[28px] text-[22px] font-bold leading-tight px-4 text-center pb-3 pt-5">
         Your Resume Settings
       </h2>
-      <p className="text-gray-500 text-center">
+      <p className="text-gray-500 text-center px-2">
         These informations will be used while creating a new resume.
       </p>
-      <div className="grid lg:grid-cols-2 grid-cols-1 gap-x-10 gap-y-4 px-4 w-full lg:w-[95%] mt-4 py-3 overflow-y-auto">
+      <div className="grid lg:grid-cols-2 grid-cols-1 gap-x-10 gap-y-4 px-4 w-full lg:w-[95%] mt-4 py-3">
         {formSections.map((field) => (
           <label key={field.name} className={`flex flex-col flex-1 w-full`}>
             <span className="text-white text-base font-medium leading-normal pb-2">

@@ -141,9 +141,9 @@ const Sidebar = ({
   };
 
   return (
-    <div className="flex flex-col w-[30%] bg-black text-white h-[100vh] gap-4 py-6 pr-4 pl-8">
+    <div className="flex flex-col lg:w-[30%] w-full bg-black text-white lg:h-[100vh] min-h-screen gap-4 py-6 lg:pr-4 lg:pl-8">
       {/* Title and Description */}
-      <div>
+      <div className="w-full flex flex-col">
         <h2 className="text-xl font-bold">Your Resume Data</h2>
         <p className="text-sm text-gray-300 mt-1">
           This section allows you to view and edit your resume data in JSON
@@ -170,7 +170,7 @@ const Sidebar = ({
       </div>
 
       {/* JSON Editor */}
-      <div className="flex-1 bg-gray-100 text-black border h-[65%] border-gray-300 rounded overflow-hidden">
+      <div className="bg-gray-100 text-black border lg:h-[70%] h-[400px] border-gray-300 rounded overflow-hidden">
         {isAIOpertations.isLoading ? (
           <div className="animate-pulse bg-gray-400 bg-opacity-50 flex h-full items-center justify-center z-10">
             <p className="text-gray-800">Loading AI response...</p>
@@ -179,7 +179,7 @@ const Sidebar = ({
           <textarea
             value={jsonText}
             onChange={(e) => handleRawJsonChange(e.target.value)}
-            className="w-full h-full font-mono p-2 text-sm outline-none resize-none overflow-y-auto"
+            className="w-full lg:h-full h-[400px] font-mono p-2 text-sm outline-none resize-none overflow-y-auto"
           />
         )}
       </div>

@@ -10,10 +10,10 @@ export default async function Dashboard() {
   return (
     <div className="flex w-full text-white bg-[#14191f] h-screen">
       <DashboardLayout>
-        <main className="px-6 space-y-1">
+        <main className="lg:px-6 px-1 space-y-1">
           <Template />
           <section className="pt-5">
-            <h2 className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3">
+            <h2 className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] lg:px-4 px-0 pb-3">
               Recent
             </h2>
             <RecentTable templates={templates || []} />

@@ -46,7 +46,7 @@ const Build = ({
   }, [template, contact]);
 
   return (
-    <div className="flex w-full h-screen lg:flex-row flex-col-reverse lg:overflow-hidden overflow-y-auto">
+    <div className="flex w-full lg:h-screen lg:flex-row flex-col lg:overflow-hidden overflow-y-auto">
       <SideNav hasOptions={true} />
       <Suspense fallback={<LoadingSkeleton />}>
         <div
@@ -63,7 +63,7 @@ const Build = ({
       </Suspense>
       <Sidebar
         sampleData={resumeData || initialData || sampleData}
-        onDataChange={(data)=>setResumeData(data)}
+        onDataChange={(data) => setResumeData(data)}
       />
     </div>
   );

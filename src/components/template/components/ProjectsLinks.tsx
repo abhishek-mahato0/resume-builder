@@ -1,9 +1,15 @@
 import React from "react";
 
-const ProjectsLinks = ({ live, code }: { live?: string; code?: string }) => {
+const ProjectsLinks = ({
+  live = "",
+  code = "",
+}: {
+  live?: string;
+  code?: string;
+}) => {
   return (
-    <div className="flex flex-col gap-1">
-      {live && (
+    <div className="flex flex-col">
+      {live ? (
         <p className="text-normal mt-1">
           Live:
           <a
@@ -15,9 +21,9 @@ const ProjectsLinks = ({ live, code }: { live?: string; code?: string }) => {
             {live}
           </a>
         </p>
-      )}
-      {code && (
-        <p className="text-normal mt-1">
+      ) : null}
+      {code ? (
+        <p className="text-normal">
           Code:
           <a
             href={code}
@@ -28,7 +34,7 @@ const ProjectsLinks = ({ live, code }: { live?: string; code?: string }) => {
             {code}
           </a>
         </p>
-      )}
+      ) : null}
     </div>
   );
 };
