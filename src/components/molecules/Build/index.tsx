@@ -15,33 +15,49 @@ const Build = ({
   template?: ResumeData | null;
   contact?: UserContact | null;
 }) => {
-  const [resumeData, setResumeData] = useState<ResumeData | null>(null);
+  const [resumeData, setResumeData] = useState<ResumeData | null>(sampleData);
   const [initialData, setInitialData] = useState<ResumeData | null>(sampleData);
 
+  // useEffect(() => {
+  //   console.log("Build component mounted", template, contact);
+  //   if (!template && !contact) {
+  //     setResumeData(sampleData);
+  //     return;
+  //   }
+  //   if (template) {
+  //     const { id, userId, createdDate, templateId, ...cleanedTemplate } =
+  //       template;
+  //     setInitialData(cleanedTemplate);
+  //     return;
+  //   } else if (contact) {
+  //     setInitialData((prev) => {
+  //       if (!prev) return null;
+  //       return {
+  //         ...prev,
+  //         contact: {
+  //           ...prev.contact,
+  //           email: contact?.email ?? prev.contact.email ?? "",
+  //           phone: contact?.phone ?? prev.contact.phone ?? "",
+  //           website: contact?.website ?? prev.contact.website ?? "",
+  //           linkedin: contact?.linkedin ?? prev.contact.linkedin ?? "",
+  //           github: contact?.github ?? prev.contact.github ?? "",
+  //           twitter: contact?.twitter ?? prev.contact.twitter ?? "",
+  //         },
+  //         name: contact?.name ?? prev.name ?? "",
+  //       };
+  //     });
+  //     return;
+  //   } else {
+  //     setInitialData(initialData);
+  //   }
+  // }, [template, contact]);
   useEffect(() => {
+    if (!template && !contact) return;
     if (template) {
       const { id, userId, createdDate, templateId, ...cleanedTemplate } =
         template;
       setInitialData(cleanedTemplate);
-    } else if (contact) {
-      setInitialData((prev) => {
-        if (!prev) return null;
-        return {
-          ...prev,
-          contact: {
-            ...prev.contact,
-            email: contact?.email ?? prev.contact.email ?? "",
-            phone: contact?.phone ?? prev.contact.phone ?? "",
-            website: contact?.website ?? prev.contact.website ?? "",
-            linkedin: contact?.linkedin ?? prev.contact.linkedin ?? "",
-            github: contact?.github ?? prev.contact.github ?? "",
-            twitter: contact?.twitter ?? prev.contact.twitter ?? "",
-          },
-          name: contact?.name ?? prev.name ?? "",
-        };
-      });
-    } else {
-      setInitialData(initialData);
+      return;
     }
   }, [template, contact]);
 
@@ -62,7 +78,7 @@ const Build = ({
         </div>
       </Suspense>
       <Sidebar
-        sampleData={resumeData || initialData || sampleData}
+        sampleData={resumeData || sampleData}
         onDataChange={(data) => setResumeData(data)}
       />
     </div>

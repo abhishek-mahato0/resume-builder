@@ -9,6 +9,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
     strategy: "jwt",
   },
+  pages:{
+   signIn: "/login",
+  },
   providers: [
     Credentials({}),
     GoogleProvider({
@@ -24,34 +27,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    // async signIn({ account, profile }) {
-    //   if (account?.provider === "google" && profile?.email) {
-    //     try {
-    //       // Check if user exists
-    //       const existingUser = await prisma.user.findUnique({
-    //         where: { email: profile.email },
-    //       });
-
-    //       // Create user if not exists
-    //       if (!existingUser) {
-    //         await prisma.user.create({
-    //           data: {
-    //             email: profile.email,
-    //             id: profile.sub || profile.email || "",
-    //             name: profile.name || profile.email || "",
-    //             image: profile.picture || "",
-    //             // password is not required for OAuth
-    //           },
-    //         });
-    //       }
-    //     } catch (err) {
-    //       console.error("Error creating user:", err);
-    //       return false; // Stop sign-in
-    //     }
-    //   }
-
-    //   return true; // Continue sign-in
-    // },
+    authorized: async ({ auth }) => {
+      return !!auth?.user;
+    },
 
     async redirect({ url, baseUrl }) {
       if (url.startsWith("/")) return `${baseUrl}${url}`;
