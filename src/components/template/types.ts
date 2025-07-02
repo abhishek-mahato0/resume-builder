@@ -39,7 +39,7 @@ export interface Education {
   endDate: string;
 }
 
-export type Level = 1 | 2 | 3 | 4 | 4;
+export type Level = 1 | 2 | 3 | 4 | 5;
 export interface Skills {
   name: string;
   level: Level;
@@ -48,6 +48,8 @@ export interface Skills {
 
 export interface Project {
   name: string;
+  startDate?: string;
+  endDate?: string;
   description: string | string[];
   tech: string[];
   live?: string;

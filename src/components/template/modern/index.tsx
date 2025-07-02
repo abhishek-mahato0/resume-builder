@@ -19,7 +19,7 @@ export const ModernHeader: FC<{ data: ResumeData }> = ({ data }) => (
     <div className="text-sm text-[#4b5563] flex flex-wrap gap-4 mt-2">
       {contactInfo.map((info, idx) =>
         data?.contact?.[info.value as keyof Contact] ? (
-          <div key={idx} className="flex items-center gap-1">
+          <div key={info.value + idx} className="flex items-center gap-1">
             {info.icon}
             <span>{data.contact[info.value as keyof Contact]}</span>
           </div>
@@ -45,7 +45,7 @@ export const ModernExperience: FC<{ experience: Experience[] }> = ({
     <Title title="Experience" />
     {experience.map((exp, idx) => (
       <div
-        key={idx}
+        key={exp.company + exp.startDate + exp.endDate + idx}
         className="p-4 mb-4  border border-[#d1d5db] rounded-md shadow-sm"
       >
         <div className="flex justify-between text-sm font-semibold text-[#111827]">
@@ -76,7 +76,7 @@ export const ModernEducation: FC<{ education: Education[] }> = ({
     <Title title="Education" />
     {education.map((edu, idx) => (
       <div
-        key={idx}
+        key={edu.startDate + idx}
         className="text-sm flex justify-between items-center p-3 border border-[#d1d5db] rounded-md mb-2 text-[#1f2937]"
       >
         <span>
@@ -99,7 +99,7 @@ export const ModernSkills: FC<{
     <div className="flex flex-wrap gap-5 list-disc list-inside  border border-[#d1d5db] rounded-md p-3 text-sm text-[#374151]">
       {skills.map((skill) => (
         <div
-          key={skill.toString()}
+          key={typeof skill === "string" ? skill : skill?.name}
           className="flex"
           style={{ alignItems: "center" }}
         >
@@ -120,7 +120,7 @@ export const ModernProjects: FC<{ projects?: Project[] }> = ({ projects }) => {
       <Title title="Projects" />
       {projects.map((proj, i) => (
         <div
-          key={i}
+          key={proj.name + i}
           className="mb-3 p-4 border border-[#d1d5db] rounded-md shadow-sm"
         >
           <div className="flex justify-between text-sm font-medium text-[#1f2937]">
@@ -137,9 +137,11 @@ export const ModernProjects: FC<{ projects?: Project[] }> = ({ projects }) => {
               </ul>
             )}
           </div>
-          <p className="text-xs italic text-[#6b7280] mt-1">
-            Tech: {proj.tech.join(", ")}
-          </p>
+          {proj.tech?.length > 0 && (
+            <p className="text-xs italic text-[#6b7280] mt-1">
+              Tech: {proj.tech.join(", ")}
+            </p>
+          )}
           <ProjectsLinks live={proj?.live} code={proj?.code} />
         </div>
       ))}

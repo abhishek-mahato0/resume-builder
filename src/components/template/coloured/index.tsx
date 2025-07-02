@@ -54,7 +54,7 @@ export const ColoredSkills: FC<{
 
         return (
           <div
-            key={skillName}
+            key={skillName + level}
             className="flex items-center justify-center gap-2"
           >
             {typeof skill !== "string" && level && (
@@ -83,8 +83,8 @@ export const ColoredExperience: FC<{ experience: Experience[] }> = ({
 }) => (
   <Layout title="Experience">
     <div className="space-y-4">
-      {experience.map((exp, idx) => (
-        <div key={idx}>
+      {experience.map((exp) => (
+        <div key={exp.startDate.toString()}>
           <div className="flex flex-col text-normal font-semibold text-[#111827]">
             <span>{exp.company}</span>
             <span className="text-xs text-[#96999d]">
@@ -108,7 +108,7 @@ export const ColoredEducation: FC<{ education: Education[] }> = ({
   <Layout title="Education">
     <div className="space-y-4">
       {education.map((exp, idx) => (
-        <div key={idx}>
+        <div key={exp.startDate.toString() + idx}>
           <div className="flex flex-col text-normal font-semibold text-[#111827]">
             <span>
               {exp.degree} - {exp.school}
@@ -132,7 +132,7 @@ export const ColoredProjects: FC<{ projects?: Project[] }> = ({ projects }) => {
           <div className="flex justify-between text-sm font-medium text-[#1f2937]">
             <span className="text-normal font-bold">{proj.name}</span>
           </div>
-          <p className="text-normal mt-1">
+          <div className="text-normal mt-1">
             {typeof proj.description === "string" ? (
               proj.description
             ) : (
@@ -142,7 +142,7 @@ export const ColoredProjects: FC<{ projects?: Project[] }> = ({ projects }) => {
                 ))}
               </ul>
             )}
-          </p>
+          </div>
           <p className="text-xs text-[#96999d] mt-1">
             Tech: {proj.tech.join(", ")}
           </p>

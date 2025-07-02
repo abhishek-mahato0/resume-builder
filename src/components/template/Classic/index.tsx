@@ -34,7 +34,7 @@ export const ClassicHeader: FC<{ data: ResumeData }> = ({ data }) => (
 export const ClassicSummary: FC<{ summary: string }> = ({ summary }) => (
   <section>
     <Title title="Professional Summary" />
-    <p className="text-justify text-[#374151]">{summary}</p>
+    <p className="text-justify text-[#374151] text-sm">{summary}</p>
   </section>
 );
 
@@ -48,7 +48,7 @@ export const ClassicExperienceSection: FC<{ experience: Experience[] }> = ({
         key={`${exp.startDate.toString()}${exp.endDate.toString()}`}
         className="mb-4"
       >
-        <div className="flex justify-between text-sm font-medium text-[#171717]">
+        <div className="flex justify-between text-sm font-semibold text-[#171717]">
           <span>
             {exp.role} @ {exp.company}
           </span>
@@ -93,17 +93,31 @@ export const ClassicSkills: FC<{
 }> = ({ skills, title = "Skills" }) => (
   <section>
     <Title title={title} />
-    <div className=" flex flex-wrap gap-3 list-disc list-inside py-3 px-4 text-sm text-[#374151]">
+    <div className=" flex flex-col gap-3 list-disc list-inside py-3 text-sm text-[#374151]">
       {skills?.map((skill, ind) => (
         <div
           key={`${
             typeof skill === "string" ? skill.toString() : skill.name
           }-${ind}`}
-          className="flex gap-1"
-          style={{ alignItems: "center" }}
+          className="flex gap-1 flex-col"
         >
-          <GoDotFill />
-          {typeof skill === "string" ? skill : skill.name}
+          {typeof skill !== "string" ? (
+            <div className="flex flex-col gap-1">
+              <p className="font-semibold">{skill.name}</p>
+              <ul className="flex items-center gap-3 list-disc">
+              {skill.subtitle?.split(",")?.map((ele) => (
+                <li className="flex items-center pl-1" key={ele}>
+                  {ele}
+                </li>
+              ))}
+              </ul>
+            </div>
+          ) : (
+            <div className="flex items-center gap-1">
+              <GoDotFill />
+              {skill}
+            </div>
+          )}
         </div>
       ))}
     </div>
@@ -119,10 +133,22 @@ export const ClassicProjects: FC<{ projects?: Project[] }> = ({ projects }) => {
         <div key={i} className="mb-3 text-[#374151]">
           <div className="flex justify-between flex-col gap-[0.5px] text-sm font-medium">
             <span className="font-[550]">{proj.name}</span>
-            <p className="text-sm">{proj.description}</p>
-            <p className="text-xs italic text-[#4B5563]">
-              Tech: {proj.tech.join(", ")}
-            </p>
+            <div className="text-sm">
+              {typeof proj?.description === "string" ? (
+                proj.description
+              ) : (
+                <ul className="list-disc ml-5">
+                  {proj.description.map((d, i) => (
+                    <li key={i}>{d}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            {proj?.tech?.length > 0 ? (
+              <p className="text-sm text-[#4B5563]">
+                Tech: {proj.tech.join(", ")}
+              </p>
+            ) : null}
             <ProjectsLinks live={proj.live} code={proj.code} />
           </div>
         </div>

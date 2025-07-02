@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 import { auth, signIn } from "@/auth";
 import { prisma } from "@/auth/db";
@@ -11,20 +12,16 @@ export const handleAuth = async (
 ) => {
   const formData = new FormData(e.currentTarget);
   const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
+  // const password = formData.get("password") as string;
   const name = formData.get("name") as string;
   if (currentForm === "login") {
     handleLogin(email);
   } else {
-    handleRegister(name, email, password);
+    handleRegister(name, email);
   }
 };
 
-export const handleRegister = async (
-  name: string,
-  email: string,
-  password: string
-) => {
+export const handleRegister = async (name: string, email: string) => {
   try {
     const existingUser = await prisma.user.findUnique({
       where: { email },
@@ -36,7 +33,7 @@ export const handleRegister = async (
     }
 
     const user = await prisma.user.create({
-      data: { name, email, password }, // Assuming password is hashed before this step
+      data: { name, email }, // Assuming password is hashed before this step
     });
 
     return user;
@@ -174,7 +171,6 @@ export async function saveSettings(formData: FormData) {
       error: "User not authenticated",
     };
   }
-
   const existingContact = await prisma.contact.findFirst({
     where: { userId: user.id },
   });
@@ -264,6 +260,7 @@ export async function getRecentTemplateById(id: string) {
     };
   }
 }
+
 export async function saveTemplate(data: ResumeData) {
   try {
     const { user } = await getUser();
@@ -294,7 +291,38 @@ export async function saveTemplate(data: ResumeData) {
   }
 }
 
-export async function getAllTemplates() {
+export async function updateTemplate(id: string, data: ResumeData) {
+  try {
+    const { user } = await getUser();
+    if (!user) {
+      redirect("/login");
+    }
+    const newTemplate = await prisma.userInfo.update({
+      where: { id: id },
+      data: {
+        ...data,
+        userId: user.id,
+        contact: JSON.parse(JSON.stringify(data.contact)),
+        experience: JSON.parse(JSON.stringify(data.experience)),
+        education: JSON.parse(JSON.stringify(data.education)),
+        skills: JSON.parse(JSON.stringify(data.skills)),
+        language: data.language
+          ? JSON.parse(JSON.stringify(data.language))
+          : undefined,
+        projects: data.projects
+          ? JSON.parse(JSON.stringify(data.projects))
+          : undefined,
+      },
+    });
+    return newTemplate;
+  } catch (error) {
+    return {
+      error: error || "Failed to save template.",
+    };
+  }
+}
+
+export async function getAllTemplates(limit: number | null) {
   try {
     const { user } = await getUser();
     if (!user) {
@@ -304,10 +332,16 @@ export async function getAllTemplates() {
       };
     }
 
-    const template = await prisma.userInfo.findMany({
+    const query: any = {
       where: { userId: user.id },
       orderBy: { updatedAt: "desc" },
-    });
+    };
+
+    if (limit) {
+      query.take = limit;
+    }
+
+    const template = await prisma.userInfo.findMany(query);
 
     if (!template || template.length === 0) {
       return {

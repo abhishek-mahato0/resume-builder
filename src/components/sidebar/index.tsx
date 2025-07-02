@@ -1,10 +1,10 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ResumeData, TemplateType } from "../template/types";
 import { RiPrinterLine } from "react-icons/ri";
-import { saveTemplate } from "../auth/utils";
+import { saveTemplate, updateTemplate } from "../auth/utils";
 import { toast } from "sonner";
-import { useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { validateResume } from "../template/zodSchema";
 import html2pdf from "html2pdf.js";
 import { IoMdSend } from "react-icons/io";
@@ -16,8 +16,10 @@ const Sidebar = ({
   sampleData: ResumeData;
   onDataChange?: (data: ResumeData | null) => void;
 }) => {
+  const params = useParams();
   const [jsonText, setJsonText] = useState(""); // editable text
   const [parsedJson, setParsedJson] = useState<ResumeData | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const searchParams = useSearchParams();
   const template = (searchParams.get("template") as TemplateType) || "classic";
   const [userInput, setUserInput] = useState("");
@@ -32,7 +34,6 @@ const Sidebar = ({
     error: null,
     data: null,
   });
-
   const downloadPDF = async (elementId: string, fileName = "resume.pdf") => {
     try {
       const element = document.getElementById(elementId);
@@ -64,7 +65,16 @@ const Sidebar = ({
     }
   };
 
+  const handleInput = () => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = "auto"; // reset first
+      textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`; // grow up to 200px
+    }
+  };
+
   useEffect(() => {
+    if (!sampleData) return;
     const prettyJson = JSON.stringify(sampleData, null, 2);
     setJsonText(prettyJson);
     setParsedJson(sampleData);
@@ -88,7 +98,14 @@ const Sidebar = ({
 
   const saveResume = async (jsonData: ResumeData) => {
     try {
-      await saveTemplate({ ...jsonData, templateId: template });
+      if (params?.id) {
+        await updateTemplate(params.id?.toString(), {
+          ...jsonData,
+          templateId: template,
+        });
+      } else {
+        await saveTemplate({ ...jsonData, templateId: template });
+      }
       toast.success("✅ Resume saved successfully!");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -219,17 +236,24 @@ const Sidebar = ({
       {/* AI Section Placeholder */}
       <div className="flex gap-4 items-center bg-gray-900 border border-gray-600 p-2 rounded">
         <textarea
+          ref={textareaRef}
           placeholder="Ask AI (coming soon)"
-          className="flex-1 bg-transparent text-white placeholder-gray-400 resize-none outline-none overflow-y-clip"
+          className="flex-1 bg-transparent text-white placeholder-gray-400 resize-none outline-none overflow-y-clip lg:max-h-[120px] max-h-[200px]"
           disabled={isAIOpertations.isLoading}
           onChange={(e) => setUserInput(e.target.value)}
           value={userInput}
+          onInput={handleInput}
         />
         <p
-          className={`text-white text-2xl cursor-pointer ${
-            isAIOpertations.isLoading ? "cursor-not-allowed" : ""
+          className={`text-white text-2xl cursor-pointer hover:scale-105 ${
+            isAIOpertations.isLoading
+              ? "cursor-not-allowed text-gray-400 animate-pulse"
+              : ""
           }`}
-          onClick={() => handleAIRequest(userInput)}
+          onClick={() => {
+            if (isAIOpertations.isLoading) return;
+            handleAIRequest(userInput);
+          }}
         >
           <IoMdSend />
         </p>

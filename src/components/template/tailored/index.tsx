@@ -150,7 +150,7 @@ export const TailoredProjects: FC<{ projects?: Project[] }> = ({
               <span>{proj.name}</span>
             </div>
             <p className="text-sm">{proj.description}</p>
-            {proj.tech ? (
+            {proj.tech?.length > 0 ? (
               <p className="text-xs italic text-[#6B7280]">
                 Tech: {proj.tech.join(", ")}
               </p>

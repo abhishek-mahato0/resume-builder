@@ -8,13 +8,13 @@ const ProjectsLinks = ({
   code?: string;
 }) => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col text-sm">
       {live ? (
-        <p className="text-normal mt-1">
+        <p className="text-sm mt-1">
           Live:
           <a
             href={live}
-            className="text-[#2563eb] underline ml-1"
+            className="text-[#2563eb] ml-1"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -23,11 +23,11 @@ const ProjectsLinks = ({
         </p>
       ) : null}
       {code ? (
-        <p className="text-normal">
+        <p className="text-sm">
           Code:
           <a
             href={code}
-            className="text-[#2563eb] underline ml-1"
+            className="text-[#2563eb] ml-1"
             target="_blank"
             rel="noopener noreferrer"
           >

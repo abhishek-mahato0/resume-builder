@@ -6,7 +6,7 @@ import DashboardLayout from "@/components/Layout/Dashboard";
 import RecentTable from "@/components/molecules/Dashboard/RecentTable";
 
 export default async function Dashboard() {
-  const { templates } = await getAllTemplates();
+  const { templates } = await getAllTemplates(5);
   return (
     <div className="flex w-full text-white bg-[#14191f] h-screen">
       <DashboardLayout>

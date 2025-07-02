@@ -49,12 +49,14 @@ const Customtable = ({ header, data }: { header?: Header[]; data?: any[] }) => {
             </TableRow>
           ))
         ) : (
-          <TableCell
-            colSpan={header ? header.length : 1}
-            className="text-center"
-          >
-            No data available
-          </TableCell>
+          <TableRow>
+            <TableCell
+              colSpan={header ? header.length : 1}
+              className="text-center"
+            >
+              No data available
+            </TableCell>
+          </TableRow>
         )}
       </TableBody>
     </Table>

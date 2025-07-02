@@ -9,12 +9,13 @@ const TemplateLayout = ({ data }: { data: ResumeData }) => {
   const sectionRefs = useRef<any>({});
   const searchParams = useSearchParams();
   const template = (searchParams.get("template") as TemplateType) || "classic";
-  // const id = (searchParams.get("id") as string) || "new";
   const [pageBreaks, setPageBreaks] = useState<any>(null);
 
   useEffect(() => {
+    const pageLimit = 850; // 1 page height
+    const threshold90 = pageLimit * 0.9; // 90% of page
+
     let accumulatedHeight = 0;
-    const pageLimit = 900; // A4 size at 96 DPI
     const breakPoints: string[] = [];
 
     for (const section of getSections(template, data)) {
@@ -22,27 +23,34 @@ const TemplateLayout = ({ data }: { data: ResumeData }) => {
       if (!el) continue;
 
       const height = el.getBoundingClientRect().height;
+      const totalHeight = accumulatedHeight + height;
 
-      if (accumulatedHeight + height > pageLimit) {
+      // D: Normal case — fits inline
+      if (height > threshold90) {
         breakPoints.push(section.id);
-        accumulatedHeight = 0; // reset for next page
+        accumulatedHeight = height;
+      } else if (totalHeight > pageLimit) {
+        breakPoints.push(section.id);
+        accumulatedHeight = height;
       } else {
         accumulatedHeight += height;
       }
     }
 
-    setPageBreaks(breakPoints); // store the points where a new page should start
+    setPageBreaks(breakPoints);
   }, []);
+
+  console.log(pageBreaks);
 
   return (
     <div
-      className={`w-[794px] mx-auto bg-[#ffffff] text-[#201f1f] font-serif p-8 shadow-lg space-y-6`}
+      className={`w-[794px] mx-auto bg-[#ffffff] text-[#201f1f] font-serif p-8 shadow-lg space-y-4`}
       id="classic-resume"
     >
-      {getSections(template, data).map((section) => {
+      {getSections(template, data).map((section, idx) => {
         const shouldBreakBefore = pageBreaks?.includes(section.id);
         return (
-          <div key={section.id}>
+          <div key={section.id + idx}>
             {shouldBreakBefore ? (
               <div className="html2pdf__page-break"></div>
             ) : null}
@@ -50,6 +58,7 @@ const TemplateLayout = ({ data }: { data: ResumeData }) => {
               ref={(el) => {
                 sectionRefs.current[section.id] = el;
               }}
+              className={`${shouldBreakBefore ? "mt-3" : ""}`}
             >
               {section.component}
             </div>

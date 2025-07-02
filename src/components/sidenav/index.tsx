@@ -15,8 +15,8 @@ import { IoMdLogOut } from "react-icons/io";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { templates } from "../template/data";
-import { ResumeData } from "../template/types";
 import AccordionData from "./AccordionData";
+import { UserInfo } from "@prisma/client";
 
 type OptionItem = {
   id: number;
@@ -31,7 +31,7 @@ export default function SideNav({
   recentResume,
 }: {
   hasOptions?: boolean;
-  recentResume?: ResumeData[] | null;
+  recentResume?: UserInfo[] | null;
 }) {
   const { data: session } = useSession();
   const [isCollapsed, setisCollapsed] = useState(false);
@@ -76,7 +76,18 @@ export default function SideNav({
       name: "My Resumes",
       icon: <FaRegFile />,
       link: "/my-resumes",
-      options: recentResume || [
+      options: recentResume?.map((ele) => ({
+        id: ele.id,
+        name: ele.title,
+        isActive: pathname.includes(ele.id),
+        onClick: () =>
+          router.push(
+            `/build/${ele.id}?${createQueryString(
+              "template",
+              ele.templateId || "classic"
+            )}`
+          ),
+      })) || [
         {
           id: 1,
           name: "No recent resumes found",
