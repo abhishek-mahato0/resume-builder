@@ -4,10 +4,10 @@ import { ResumeData } from "@/components/template/types";
 import { redirect } from "next/navigation";
 
 const page = async ({ params }: { params: { id: string } }) => {
-  const templateInfo = await getRecentTemplateById(params.id);
+  const {template } = await getRecentTemplateById(params.id);
   const allTemplate = await getAllTemplates(5);
-  if (!templateInfo) redirect("/dashboard");
-  return <Build template={templateInfo as unknown as ResumeData} allTemplates={allTemplate?.templates} />;
+  if (!template) redirect("/dashboard");
+  return <Build template={template as unknown as ResumeData} allTemplates={allTemplate?.templates} />;
 };
 
 export default page;

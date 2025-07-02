@@ -21,9 +21,9 @@ export const ClassicHeader: FC<{ data: ResumeData }> = ({ data }) => (
         data?.contact?.[info.value as keyof Contact] ? (
           <div key={idx} className="flex items-center gap-1">
             {info.icon}
-            <span>
+            <a href={data.contact?.[info.value as keyof Contact] || info.label} target="_blank">
               {data.contact?.[info.value as keyof Contact] || info.label}
-            </span>
+            </a>
           </div>
         ) : null
       )}

@@ -21,7 +21,7 @@ export const ModernHeader: FC<{ data: ResumeData }> = ({ data }) => (
         data?.contact?.[info.value as keyof Contact] ? (
           <div key={info.value + idx} className="flex items-center gap-1">
             {info.icon}
-            <span>{data.contact[info.value as keyof Contact]}</span>
+            <a href={data.contact[info.value as keyof Contact]} target="_blank">{data.contact[info.value as keyof Contact]}</a>
           </div>
         ) : null
       )}

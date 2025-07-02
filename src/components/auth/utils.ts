@@ -246,6 +246,7 @@ export async function getRecentTemplateById(id: string) {
     if (!user) {
       return {
         error: "User not authenticated",
+        template: null,
       };
     }
 
@@ -253,10 +254,11 @@ export async function getRecentTemplateById(id: string) {
       where: { id: id },
     });
 
-    return template;
+    return { error: null, template: template };
   } catch (error) {
     return {
       error: error || "Failed to fetch recent template.",
+      template: null,
     };
   }
 }

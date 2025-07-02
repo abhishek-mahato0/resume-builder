@@ -87,7 +87,7 @@ export const ColoredExperience: FC<{ experience: Experience[] }> = ({
         <div key={exp.startDate.toString()}>
           <div className="flex flex-col text-normal font-semibold text-[#111827]">
             <span>{exp.company}</span>
-            <span className="text-xs text-[#96999d]">
+            <span className="text-sm text-[#6b7280]">
               {exp.startDate} – {exp.endDate}
             </span>
           </div>
@@ -113,7 +113,7 @@ export const ColoredEducation: FC<{ education: Education[] }> = ({
             <span>
               {exp.degree} - {exp.school}
             </span>
-            <span className="text-xs text-[#96999d]">
+            <span className="text-sm text-[#6b7280]">
               {exp.startDate} – {exp.endDate}
             </span>
           </div>
@@ -143,9 +143,11 @@ export const ColoredProjects: FC<{ projects?: Project[] }> = ({ projects }) => {
               </ul>
             )}
           </div>
-          <p className="text-xs text-[#96999d] mt-1">
-            Tech: {proj.tech.join(", ")}
-          </p>
+          {proj.tech?.length > 0 && (
+            <p className="text-sm text-[#6a6b6c] mt-1">
+              Tech: {proj.tech.join(", ")}
+            </p>
+          )}
           <ProjectsLinks live={proj?.live} code={proj?.code} />
         </div>
       ))}
@@ -154,28 +156,30 @@ export const ColoredProjects: FC<{ projects?: Project[] }> = ({ projects }) => {
 };
 
 export const ColoredHeader: FC<{ data: ResumeData }> = ({ data }) => (
-  <div className="flex w-full">
-    <div className="w-[25%]">
-      <span className="text-[#6b7280]">About Me</span>
+  <div className="flex w-full flex-col">
+    <div className="flex flex-col gap-2">
+      <h1 className="text-2xl font-bold text-[#111827]">
+        {data.name || "Your Name"}
+      </h1>
+      <p className=" text-[#374151] text-justify">
+        {data.summary || "Your summary here."}
+      </p>
     </div>
-    <div className="flex flex-col gap-6 w-[75%]">
-      <div className="text-normal text-[#6b7280] flex flex-wrap gap-4">
-        {contactInfo.map((info, idx) =>
-          data?.contact?.[info.value as keyof Contact] ? (
-            <div key={idx} className="flex items-center gap-1">
-              {info.icon}
-              <span>{data.contact[info.value as keyof Contact]}</span>
-            </div>
-          ) : null
-        )}
+    <div className="flex w-full mt-4">
+      <div className="w-[25%]">
+        <span className="text-[#6b7280]">About Me</span>
       </div>
-      <div className="flex flex-col gap-2">
-        <h1 className="text-2xl font-bold text-[#111827]">
-          {data.name || "Your Name"}
-        </h1>
-        <p className=" text-[#374151] font-semibold">
-          {data.summary || "Your summary here."}
-        </p>
+      <div className="flex flex-col gap-6 w-[75%]">
+        <div className="text-normal text-[#6b7280] flex flex-wrap gap-4">
+          {contactInfo.map((info, idx) =>
+            data?.contact?.[info.value as keyof Contact] ? (
+              <div key={idx} className="flex items-center gap-1">
+                {info.icon}
+                <a target="_blank" href={data.contact[info.value as keyof Contact]}>{data.contact[info.value as keyof Contact]}</a>
+              </div>
+            ) : null
+          )}
+        </div>
       </div>
     </div>
   </div>
