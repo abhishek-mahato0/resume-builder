@@ -8,15 +8,20 @@ generator client {
 }
 
 model User {
-  id            String          @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String?         @unique
-  emailVerified DateTime?
-  password      String?         @db.String
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  // Optional for WebAuthn support
+  id                         String    @id @default(auto()) @map("_id") @db.ObjectId
+  name                       String?
+  email                      String?   @unique
+  emailVerified              DateTime?
+  password                   String?   @db.String
+  image                      String?
+  accounts                   Account[]
+  sessions                   Session[]
+  verificationToken          String?
+  verificationTokenExpires   DateTime?
+  forgetPasswordToken        String?
+  forgetPasswordTokenExpires DateTime?
+  promptCount                Int       @default(0)
+
   Authenticator Authenticator[]
 
   createdAt DateTime @default(now())

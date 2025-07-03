@@ -8,7 +8,7 @@ const page = async () => {
   return (
     <div className=" w-full h-full bg-[#14191f]">
       <DashboardLayout>
-        <div className="flex flex-col gap-4 items-center h-full">
+        <div className="flex flex-col gap-4 items-center min-h-screen">
           <p className="text-white tracking-light lg:text-[32px] text-[22px] font-bold leading-tight">
             Your Recent Resume List
           </p>

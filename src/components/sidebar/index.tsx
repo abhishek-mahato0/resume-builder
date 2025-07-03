@@ -12,9 +12,11 @@ import { IoMdSend } from "react-icons/io";
 const Sidebar = ({
   sampleData,
   onDataChange,
+  onDownloadResume,
 }: {
   sampleData: ResumeData;
   onDataChange?: (data: ResumeData | null) => void;
+  onDownloadResume?: () => void;
 }) => {
   const params = useParams();
   const [jsonText, setJsonText] = useState(""); // editable text
@@ -117,6 +119,7 @@ const Sidebar = ({
     }
   };
   const downloadResume = async () => {
+    onDownloadResume?.();
     setIsLoading(true);
     if (!parsedJson) {
       setIsLoading(false);
@@ -237,8 +240,8 @@ const Sidebar = ({
       <div className="flex gap-4 items-center bg-gray-900 border border-gray-600 p-2 rounded">
         <textarea
           ref={textareaRef}
-          placeholder="Ask AI (coming soon)"
-          className="flex-1 bg-transparent text-white placeholder-gray-400 resize-none outline-none overflow-y-clip lg:max-h-[120px] max-h-[200px]"
+          placeholder="Ask AI (Tailor this resume to a specific job, add skills, etc.)"
+          className="flex-1 bg-transparent text-white placeholder-gray-400 resize-none outline-none overflow-y-auto lg:max-h-[120px] max-h-[200px]"
           disabled={isAIOpertations.isLoading}
           onChange={(e) => setUserInput(e.target.value)}
           value={userInput}

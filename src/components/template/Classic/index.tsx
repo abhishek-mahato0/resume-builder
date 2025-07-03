@@ -9,7 +9,7 @@ import {
 } from "../types";
 import Title from "@/components/atoms/Title";
 import { GoDotFill } from "react-icons/go";
-import { contactInfo } from "../utils";
+import { contactInfo, isArrayString } from "../utils";
 import ProjectsLinks from "../components/ProjectsLinks";
 
 export const ClassicHeader: FC<{ data: ResumeData }> = ({ data }) => (
@@ -21,7 +21,10 @@ export const ClassicHeader: FC<{ data: ResumeData }> = ({ data }) => (
         data?.contact?.[info.value as keyof Contact] ? (
           <div key={idx} className="flex items-center gap-1">
             {info.icon}
-            <a href={data.contact?.[info.value as keyof Contact] || info.label} target="_blank">
+            <a
+              href={data.contact?.[info.value as keyof Contact] || info.label}
+              target="_blank"
+            >
               {data.contact?.[info.value as keyof Contact] || info.label}
             </a>
           </div>
@@ -93,7 +96,11 @@ export const ClassicSkills: FC<{
 }> = ({ skills, title = "Skills" }) => (
   <section>
     <Title title={title} />
-    <div className=" flex flex-col gap-3 list-disc list-inside py-3 text-sm text-[#374151]">
+    <div
+      className={`flex ${
+        isArrayString(skills) ? "flex-wrap" : "flex-col"
+      } gap-4 list-disc list-inside py-3 text-sm text-[#374151]`}
+    >
       {skills?.map((skill, ind) => (
         <div
           key={`${
@@ -104,12 +111,12 @@ export const ClassicSkills: FC<{
           {typeof skill !== "string" ? (
             <div className="flex flex-col gap-1">
               <p className="font-semibold">{skill.name}</p>
-              <ul className="flex items-center gap-3 list-disc">
-              {skill.subtitle?.split(",")?.map((ele) => (
-                <li className="flex items-center pl-1" key={ele}>
-                  {ele}
-                </li>
-              ))}
+              <ul className="flex items-center gap-3 list-disc flex-wrap">
+                {skill.subtitle?.split(",")?.map((ele) => (
+                  <li className="flex items-center pl-1" key={ele}>
+                    {ele}
+                  </li>
+                ))}
               </ul>
             </div>
           ) : (

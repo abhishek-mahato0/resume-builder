@@ -9,7 +9,7 @@ import {
 } from "../types";
 import Title from "@/components/atoms/Title";
 import { GoDotFill } from "react-icons/go";
-import { contactInfo } from "../utils";
+import { contactInfo, isArrayString } from "../utils";
 import ProjectsLinks from "../components/ProjectsLinks";
 
 export const ModernHeader: FC<{ data: ResumeData }> = ({ data }) => (
@@ -21,7 +21,9 @@ export const ModernHeader: FC<{ data: ResumeData }> = ({ data }) => (
         data?.contact?.[info.value as keyof Contact] ? (
           <div key={info.value + idx} className="flex items-center gap-1">
             {info.icon}
-            <a href={data.contact[info.value as keyof Contact]} target="_blank">{data.contact[info.value as keyof Contact]}</a>
+            <a href={data.contact[info.value as keyof Contact]} target="_blank">
+              {data.contact[info.value as keyof Contact]}
+            </a>
           </div>
         ) : null
       )}
@@ -96,17 +98,35 @@ export const ModernSkills: FC<{
 }> = ({ skills, title = "Skills" }) => (
   <section className="mt-6">
     <Title title={title} />
-    <div className="flex flex-wrap gap-5 list-disc list-inside  border border-[#d1d5db] rounded-md p-3 text-sm text-[#374151]">
-      {skills.map((skill) => (
+    <div
+      className={`flex ${
+        isArrayString(skills) ? "flex-wrap" : "flex-col"
+      } gap-5 list-disc list-inside border border-[#d1d5db] rounded-md p-3 text-sm text-[#374151]`}
+    >
+      {skills?.map((skill, ind) => (
         <div
-          key={typeof skill === "string" ? skill : skill?.name}
-          className="flex"
-          style={{ alignItems: "center" }}
+          key={`${
+            typeof skill === "string" ? skill.toString() : skill.name
+          }-${ind}`}
+          className="flex gap-1 flex-col"
         >
-          <span>
-            <GoDotFill />
-          </span>
-          <span>{typeof skill === "string" ? skill : skill.name}</span>
+          {typeof skill !== "string" ? (
+            <div className="flex flex-col gap-1">
+              <p className="font-semibold">{skill.name}</p>
+              <ul className="flex items-center gap-3 list-disc">
+                {skill.subtitle?.split(",")?.map((ele) => (
+                  <li className="flex items-center pl-1" key={ele}>
+                    {ele}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <div className="flex items-center gap-1">
+              <GoDotFill />
+              {skill}
+            </div>
+          )}
         </div>
       ))}
     </div>

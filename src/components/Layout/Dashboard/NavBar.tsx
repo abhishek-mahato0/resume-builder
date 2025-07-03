@@ -39,7 +39,7 @@ const NavBar = () => {
   return (
     <>
       {/* Navbar */}
-      <div className="lg:hidden sticky top-0 z-50 bg-[#14191f] text-white shadow-md px-4 py-2 flex items-center justify-between">
+      <div className="lg:hidden sticky top-0 z-50 bg-[#14191f] text-white shadow-md p-4 mb-4 flex items-center justify-between">
         <h1 className="text-xl font-bold">Resume.io</h1>
         <button onClick={() => setIsOpen(true)}>
           <HiOutlineMenu className="text-2xl" />

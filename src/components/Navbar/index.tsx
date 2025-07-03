@@ -27,15 +27,18 @@ const Navbar = () => {
             </defs>
           </svg>
         </div>
-        <h2 className="text-white text-lg font-bold leading-tight tracking-[-0.015em]">
+        <Link
+          href="/"
+          className="text-white text-lg font-bold leading-tight tracking-[-0.015em]"
+        >
           ResumeCraft
-        </h2>
+        </Link>
       </div>
       <div className="flex flex-1 justify-end gap-8">
         <div className="flex items-center gap-9">
           <Link
             className="text-white text-sm font-medium leading-normal"
-            href="#"
+            href="/templates"
           >
             Templates
           </Link>

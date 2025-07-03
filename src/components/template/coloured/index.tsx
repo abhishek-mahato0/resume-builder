@@ -91,9 +91,9 @@ export const ColoredExperience: FC<{ experience: Experience[] }> = ({
               {exp.startDate} – {exp.endDate}
             </span>
           </div>
-          <ul className="list-disc ml-5 pl-2 mt-2 text-normal">
+          <ul className="list-disc ml-5 pl-2 mt-2 text-sm text-[#374151]">
             {exp.description.map((desc, i) => (
-              <li key={i}>{desc}</li>
+              <li key={desc + i}>{desc}</li>
             ))}
           </ul>
         </div>
@@ -156,7 +156,7 @@ export const ColoredProjects: FC<{ projects?: Project[] }> = ({ projects }) => {
 };
 
 export const ColoredHeader: FC<{ data: ResumeData }> = ({ data }) => (
-  <div className="flex w-full flex-col">
+  <div className="flex w-full flex-col mb-6">
     <div className="flex flex-col gap-2">
       <h1 className="text-2xl font-bold text-[#111827]">
         {data.name || "Your Name"}
@@ -175,7 +175,12 @@ export const ColoredHeader: FC<{ data: ResumeData }> = ({ data }) => (
             data?.contact?.[info.value as keyof Contact] ? (
               <div key={idx} className="flex items-center gap-1">
                 {info.icon}
-                <a target="_blank" href={data.contact[info.value as keyof Contact]}>{data.contact[info.value as keyof Contact]}</a>
+                <a
+                  target="_blank"
+                  href={data.contact[info.value as keyof Contact]}
+                >
+                  {data.contact[info.value as keyof Contact]}
+                </a>
               </div>
             ) : null
           )}

@@ -168,3 +168,15 @@ export const contactInfo = [
     icon: <FaGithub />,
   },
 ];
+
+export function isArrayString(arr: string[] | object[]): boolean {
+  if (!Array.isArray(arr)) return true;
+
+  if (arr.every((item) => typeof item === "string")) {
+    return true;
+  } else if (arr.every((item) => typeof item === "object" && item !== null)) {
+    return false;
+  } else {
+    return true;
+  }
+}

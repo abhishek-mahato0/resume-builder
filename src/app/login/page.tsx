@@ -69,8 +69,8 @@ export default function Page() {
               Sign in with Google
             </button>
             <Link
-              href="/register"
-              className="text-[#9dacbe] text-sm font-normal leading-normal pb-3 pt-3 px-4 text-center underline"
+              href={`/register?callbackUrl=${searchParams.get("callbackUrl")}`}
+              className="text-[#9dacbe] text-sm font-normal leading-normal pb-3 pt-3 px-4 text-center underline cursor-pointer"
             >
               Don&rsquo;t have an account?{" "}
               <span className=" text-white">Sign Up</span>
