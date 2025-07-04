@@ -62,7 +62,7 @@ const Build = ({
 
   useEffect(() => {
     if (!resumeData) return;
-    const pageLimit = 880; // 1 page height
+    const pageLimit = 900; // 1 page height
     const threshold30 = pageLimit * 0.3; // 90% of page
 
     let accumulatedHeight = 0;
@@ -89,8 +89,6 @@ const Build = ({
 
     setPageBreaks(breakPoints);
   }, [resumeData, activeTemplate]);
-
-  console.log("Page Breaks:", pageBreaks);
 
   return (
     <div className="flex w-full lg:h-screen lg:flex-row flex-col lg:overflow-hidden overflow-y-auto">

@@ -2,8 +2,8 @@ import React from "react";
 
 const page = () => {
   return (
-    <div className=" w-full h-screen">
-      <div className="flex flex-col items-center justify-center h-full">
+    <div className=" w-full h-screen flex items-center justify-center">
+      <form className="flex flex-col lg:w-[512px] w-full py-5">
         <h2 className="text-white tracking-light text-[28px] font-bold leading-tight px-4 text-center pb-3 pt-5">
           Forgot Password
         </h2>
@@ -22,7 +22,13 @@ const page = () => {
             />
           </label>
         </div>
-      </div>
+        <button
+          type="submit"
+          className="flex min-w-[84px] mt-4 cursor-pointer items-center justify-center overflow-hidden rounded-full py-3 px-5 flex-1 bg-white text-[#14191f] text-base font-bold leading-normal tracking-[0.015em]"
+        >
+          Submit
+        </button>
+      </form>
     </div>
   );
 };

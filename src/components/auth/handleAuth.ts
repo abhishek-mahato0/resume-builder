@@ -42,7 +42,7 @@ export const handleRegister = async (_: any, formData: FormData) => {
       <p>Thank you for registering. Please verify your email by clicking the link below:</p>
       <a href="${verificationUrl}">Verify Email</a>
     `;
-    await sendEmail({to:email, subject:"Verify your email", html});
+    await sendEmail({ to: email, subject: "Verify your email", html });
     console.log("User registered successfully:", user);
     return {
       success: true,
@@ -61,11 +61,15 @@ export const handleRegister = async (_: any, formData: FormData) => {
 export const verifyUserEmail = async (token: string) => {
   const user = await prisma.user.findFirst({
     where: {
-      verificationToken: token
+      verificationToken: token,
     },
   });
 
-  if (!user || !user.verificationTokenExpires || user.verificationTokenExpires < new Date()) {
+  if (
+    !user ||
+    !user.verificationTokenExpires ||
+    user.verificationTokenExpires < new Date()
+  ) {
     return { success: false, message: "Invalid or expired token." };
   }
 
@@ -95,5 +99,55 @@ export const handleLogin = async (email: string) => {
   } catch (err) {
     console.error("Error logging in user:", err);
     throw err;
+  }
+};
+
+export const resetPassword = async (
+  _: any,
+  formData: FormData,
+  email: string
+) => {
+  try {
+    const password = formData.get("newPassword") as string;
+    const currPassword = formData.get("confirmPassword") as string;
+    if (!password || !currPassword) {
+      return {
+        success: false,
+        message: "Password is required.",
+      };
+    }
+    if (password !== currPassword) {
+      return {
+        success: false,
+        message: "Password does not match.",
+      };
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await prisma.user.update({
+      where: { email: email },
+      data: {
+        password: hashedPassword,
+      },
+    });
+
+    return {
+      success: true,
+      message: "Password changed successfully.",
+    };
+  } catch {
+    return {
+      success: false,
+      message: "Error occured while changing password",
+    };
+  }
+};
+
+export const forgetPassword = async () => {
+  try {
+  } catch {
+    return {
+      success: false,
+      message: "Error occured while changing password",
+    };
   }
 };

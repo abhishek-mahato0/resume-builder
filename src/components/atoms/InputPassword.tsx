@@ -29,7 +29,7 @@ const InputPassword = ({
             placeholder={placeholder}
             autoComplete="current-password"
             name={name}
-            type="text"
+            type={showPassword ? "text" : "password"}
             required={required}
             disabled={disabled}
             className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#2b3540] focus:border-none h-14 placeholder:text-[#9dacbe] p-4 text-base font-normal leading-normal"
@@ -38,7 +38,7 @@ const InputPassword = ({
             className="absolute right-[20px] text-xl cursor-pointer text-gray-500"
             onClick={() => setShowPassword(!showPassword)}
           >
-            {showPassword ? <FaEye /> : <HiEyeOff />}
+            {!showPassword ? <FaEye /> : <HiEyeOff />}
           </div>
         </div>
       </label>
