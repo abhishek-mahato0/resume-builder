@@ -1,12 +1,14 @@
 "use client";
 
 import { signIn } from "@/auth";
+import InputPassword from "@/components/atoms/InputPassword";
 import { handleRegister } from "@/components/auth/handleAuth";
-import Navbar from "@/components/Navbar";
+import Button from "@/components/ui/Button";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useActionState, useTransition } from "react";
+import { useActionState, useEffect, useTransition } from "react";
 import { FaGoogle } from "react-icons/fa";
+import { toast } from "sonner";
 
 const initialState = {
   message: "",
@@ -23,10 +25,19 @@ export default function Page() {
       formAction(formData);
     });
   };
+  useEffect(()=>{
+    if (formstate.success) {
+      toast.success(formstate.message, {
+        duration: 3000,
+      });
+    }
+    if (!formstate.success && formstate.message) {
+      toast.error(formstate.message, {
+        duration: 3000,
+      });
+    }
+  }, [formstate]);
   return (
-    <div className="relative flex size-full min-h-screen flex-col bg-[#14191f] dark group/design-root overflow-x-hidden">
-      <Navbar />
-      <div className="layout-container flex h-full w-full items-center justify-center flex-col">
         <form
           action={handleSubmit}
           className="layout-content-container flex flex-col lg:w-[512px] w-full py-5 flex-1"
@@ -66,29 +77,17 @@ export default function Page() {
               />
             </label>
           </div>
-          <div className="flex flex-wrap items-end gap-4 px-4 py-3">
-            <label className="flex flex-col min-w-40 flex-1">
-              <p className="text-white text-base font-medium leading-normal pb-2">
-                Password
-              </p>
-              <input
-                placeholder="Password"
-                name="password"
-                type="text"
-                required
-                disabled={isPending}
-                className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#2b3540] focus:border-none h-14 placeholder:text-[#9dacbe] p-4 text-base font-normal leading-normal"
-              />
-            </label>
-          </div>
-          <div className="flex px-4 py-3">
-            <button
+         <InputPassword
+         name="password"/>
+          <div className="flex px-4 py-3 w-full items-center justify-center">
+            <Button
               type="submit"
-              className="flex min-w-[84px]  cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-5 flex-1 bg-white text-[#14191f] text-base font-bold leading-normal tracking-[0.015em]"
+              variant="white"
               disabled={isPending}
+              className="w-[98%]"
             >
               {isPending ? "Signing Up..." : "Sign Up"}
-            </button>
+            </Button>
           </div>
           {formstate?.message && (
             <div className="flex items-center justify-between px-4 py-3 text-xs text-red-600">
@@ -122,7 +121,6 @@ export default function Page() {
             </Link>
           </div>
         </form>
-      </div>
-    </div>
+      
   );
 }

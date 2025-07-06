@@ -9,11 +9,39 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
     strategy: "jwt",
   },
-  pages:{
-   signIn: "/login",
+  pages: {
+    signIn: "/login",
   },
   providers: [
-    Credentials({}),
+    Credentials({
+      name: "Credentials",
+      authorize: async (credentials) => {
+        try {
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email as string },
+          });
+
+          if (!user) {
+            throw new Error("User not found");
+          }
+
+          if (!user.password) {
+            throw new Error(
+              "You have registered using Google, please login with Google."
+            );
+          }
+
+          if (user.password !== credentials.password) {
+            throw new Error("Invalid credentials");
+          }
+
+          return user;
+        } catch (err) {
+          console.error("Error logging in user:", err);
+          throw err;
+        }
+      },
+    }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
